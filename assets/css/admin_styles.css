@@ -1,0 +1,193 @@
+/* General styles for the dashboard */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
+}
+
+h2 {
+    color: #6A0DAD;
+    margin-bottom: 15px;
+}
+
+/* Dashboard card styles */
+.dashboard-card {
+    display: block;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    text-decoration: none; /* Remove underline */
+    color: #333;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    margin-bottom: 20px; /* Space between cards */
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    color: #6A0DAD;
+    text-decoration: none;
+}
+
+/* Card icon styles */
+.card-icon {
+    font-size: 40px;
+    margin-bottom: 15px;
+    color: #6A0DAD;
+}
+
+/* Card content */
+.card-content h3 {
+    margin: 0;
+    font-size: 1.3em;
+    color: #6A0DAD;
+}
+
+.card-content p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Responsive design handled by Bootstrap grid */
+
+
+/* Style for the navbar */
+.navbar {
+    padding: 1rem 2rem; /* Add padding to the navbar */
+    margin-top: 10px; /* Add space above the navbar */
+    background-color: #007bff; /* Adjust background color */
+}
+
+.navbar-brand {
+    margin-right: 2rem; /* Space between brand and menu items */
+    font-size: 1.5rem; /* Increase font size for brand */
+    font-weight: bold; /* Make brand text bold */
+}
+
+/* Style for the navbar links */
+.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    align-items: center; /* Align items vertically centered */
+    list-style: none; /* Remove list item dots */
+    padding-left: 0; /* Remove padding */
+}
+
+.nav-item {
+    margin: 0 1rem; /* Horizontal spacing between items */
+}
+
+.nav-link {
+    padding: 0.75rem 1.5rem; /* Add padding to each link */
+    text-decoration: none; /* Remove underline */
+    color: #ffffff; /* White text color */
+    border-radius: 0.25rem; /* Rounded corners */
+    display: flex;
+    align-items: center; /* Center icon and text */
+}
+
+.nav-link i {
+    margin-right: 0.5rem; /* Space between icon and text */
+    font-size: 1.2rem; /* Adjust icon size */
+}
+
+.nav-link:hover {
+    color: #f0f0f0; /* Light gray on hover */
+    background-color: #0056b3; /* Darker blue background on hover */
+    border-radius: 0.25rem; /* Keep rounded corners on hover */
+}
+
+/* Optional: Add styles for responsive design if needed */
+@media (max-width: 767.98px) {
+    .navbar {
+        padding: 0.75rem; /* Adjust padding on smaller screens */
+    }
+
+    .navbar-brand {
+        font-size: 1.25rem; /* Slightly smaller font size for brand */
+    }
+
+    .nav-link {
+        padding: 0.5rem 1rem; /* Adjust padding for links on smaller screens */
+    }
+}
+
+/* Basic styling for the table */
+.table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.table th {
+    background-color: #f4f4f4;
+}
+
+.table img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Slick slider styling */
+.slider {
+    width: 100%;
+    max-width: 300px;
+    margin: auto;
+}
+
+.slider img {
+    width: 100%;
+    border-radius: 5px;
+}
+
+/* Buttons styling */
+.btn {
+    padding: 10px 20px;
+    margin: 5px;
+    text-decoration: none;
+}
+
+.filter.btn {
+    padding: 6px 12px;
+    margin: 0;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.btn-sm {
+    font-size: 0.875rem;
+    padding: 5px 10px;
+}
+
+.filter-products .col-md-2 {
+    width: 10%; /* You can adjust this to any specific width */    
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.filter-products .col-md-1 {
+    width: 7%; /* You can adjust this to any specific width */
+    padding-right: 5px;
+    padding-left: 5px;
+}

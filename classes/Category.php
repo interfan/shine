@@ -10,6 +10,7 @@ class Category {
     public $parent_id;
     public $slug;
     public $created_at;
+    public $is_disabled; // New property
 
     // Constructor to initialize the database connection
     public function __construct($db) {
@@ -18,7 +19,8 @@ class Category {
 
     // Create a new category
     public function create() {
-        $query = "INSERT INTO " . $this->table_name . " (name, description, parent_id, slug) VALUES (:name, :description, :parent_id, :slug)";
+        $query = "INSERT INTO " . $this->table_name . " (name, description, parent_id, slug, is_disabled) 
+                  VALUES (:name, :description, :parent_id, :slug, :is_disabled)";
 
         $stmt = $this->conn->prepare($query);
 
@@ -27,23 +29,23 @@ class Category {
         $this->description = htmlspecialchars($this->sanitize($this->description));
         $this->parent_id = $this->parent_id ?? null; // Default to null if not set
         $this->slug = htmlspecialchars($this->sanitize($this->slug));
+        $this->is_disabled = $this->is_disabled ?? 0; // Default to 0 if not set
 
         // Bind parameters
         $stmt->bindParam(':name', $this->name);
         $stmt->bindParam(':description', $this->description);
         $stmt->bindParam(':parent_id', $this->parent_id, PDO::PARAM_INT);
         $stmt->bindParam(':slug', $this->slug);
+        $stmt->bindParam(':is_disabled', $this->is_disabled, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        return $stmt->execute();
     }
 
     // Read all categories with their parent-child relationships
     public function readAll() {
-        $query = "SELECT id, name, description, parent_id, slug, created_at FROM " . $this->table_name . " ORDER BY parent_id, name";
+        $query = "SELECT id, name, description, parent_id, slug, created_at, is_disabled 
+                  FROM " . $this->table_name . " 
+                  ORDER BY parent_id, name";
 
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
@@ -53,7 +55,9 @@ class Category {
 
     // Read a single category by ID
     public function readOne() {
-        $query = "SELECT id, name, description, parent_id, slug, created_at FROM " . $this->table_name . " WHERE id = :id";
+        $query = "SELECT id, name, description, parent_id, slug, created_at, is_disabled 
+                  FROM " . $this->table_name . " 
+                  WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
@@ -66,17 +70,23 @@ class Category {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        // Set object properties
-        $this->name = $row['name'];
-        $this->description = $row['description'];
-        $this->parent_id = $row['parent_id'];
-        $this->slug = $row['slug'];
-        $this->created_at = $row['created_at'];
+        if ($row) {
+            // Set object properties
+            $this->name = $row['name'];
+            $this->description = $row['description'];
+            $this->parent_id = $row['parent_id'];
+            $this->slug = $row['slug'];
+            $this->created_at = $row['created_at'];
+            $this->is_disabled = $row['is_disabled']; // Set new property
+        }
     }
 
     // Update a category
     public function update() {
-        $query = "UPDATE " . $this->table_name . " SET name = :name, description = :description, parent_id = :parent_id, slug = :slug WHERE id = :id";
+        $query = "UPDATE " . $this->table_name . " 
+                  SET name = :name, description = :description, parent_id = :parent_id, 
+                      slug = :slug, is_disabled = :is_disabled 
+                  WHERE id = :id";
 
         $stmt = $this->conn->prepare($query);
 
@@ -86,6 +96,7 @@ class Category {
         $this->parent_id = $this->parent_id ?? null;
         $this->slug = htmlspecialchars($this->sanitize($this->slug));
         $this->id = htmlspecialchars($this->sanitize($this->id));
+        $this->is_disabled = $this->is_disabled ?? 0;
 
         // Bind parameters
         $stmt->bindParam(':name', $this->name);
@@ -93,12 +104,9 @@ class Category {
         $stmt->bindParam(':parent_id', $this->parent_id, PDO::PARAM_INT);
         $stmt->bindParam(':slug', $this->slug);
         $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':is_disabled', $this->is_disabled, PDO::PARAM_INT);
 
-        if ($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        return $stmt->execute();
     }
 
     // Delete a category
@@ -124,16 +132,15 @@ class Category {
         // Bind parameter
         $stmt->bindParam(':id', $this->id);
 
-        if ($stmt->execute()) {
-            return true;
-        }
-
-        return false;
+        return $stmt->execute();
     }
 
     // Read subcategories of a given category
     public function readSubcategories() {
-        $query = "SELECT id, name, description, slug, created_at FROM " . $this->table_name . " WHERE parent_id = :parent_id ORDER BY name";
+        $query = "SELECT id, name, description, slug, created_at, is_disabled 
+                  FROM " . $this->table_name . " 
+                  WHERE parent_id = :parent_id 
+                  ORDER BY name";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':parent_id', $this->id);
         $stmt->execute();
@@ -141,6 +148,66 @@ class Category {
         $result[1] = $stmt->fetchColumn();
         return $result;
     }
+
+    // Disable a category
+    public function disable() {
+        $this->is_disabled = 1; // Set to 1 to disable
+
+        $query = "UPDATE " . $this->table_name . " 
+                  SET is_disabled = :is_disabled 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Sanitize input
+        $this->id = htmlspecialchars($this->sanitize($this->id));
+        $this->is_disabled = htmlspecialchars($this->sanitize($this->is_disabled));
+
+        // Bind parameters
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':is_disabled', $this->is_disabled, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    // Enable a category
+    public function enable() {
+        $this->is_disabled = 0; // Set to 0 to enable
+
+        $query = "UPDATE " . $this->table_name . " 
+                  SET is_disabled = :is_disabled 
+                  WHERE id = :id";
+
+        $stmt = $this->conn->prepare($query);
+
+        // Sanitize input
+        $this->id = htmlspecialchars($this->sanitize($this->id));
+        $this->is_disabled = htmlspecialchars($this->sanitize($this->is_disabled));
+
+        // Bind parameters
+        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':is_disabled', $this->is_disabled, PDO::PARAM_INT);
+
+        return $stmt->execute();
+    }
+
+    public function readAllWithPagination($limit, $offset) {
+        $query = "SELECT * FROM categories ORDER BY created_at DESC LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function countAll() {
+        $query = "SELECT COUNT(*) as total FROM categories";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $row['total'];
+    }
+    
 
     // Sanitize input
     private function sanitize($input) {

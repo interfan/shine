@@ -22,18 +22,53 @@ $currentSettings = $settings->getSettings();
 include '../includes/internal/header.php';
 ?>
 
-<h2>Site Settings</h2>
-<form action="settings.php" method="post">
-    <label for="currency">Default Currency:</label>
-    <input type="text" name="currency" id="currency" value="<?php echo $currentSettings['currency']; ?>">
+<!-- Custom CSS -->
+<style>
+    .settings-container {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+    .form-control {
+        padding: 10px; /* Add padding to input fields */
+        border-radius: 5px; /* Rounded corners */
+    }
+    .btn-primary {
+        padding: 10px 20px; /* Add padding to button */
+    }
+</style>
 
-    <label for="language">Default Language:</label>
-    <input type="text" name="language" id="language" value="<?php echo $currentSettings['language']; ?>">
+<div class="settings-container">
+    <h2>Site Settings</h2>
+    <form action="settings.php" method="post">
+        <div class="form-group">
+            <label for="currency" class="form-label">Default Currency:</label>
+            <input type="text" name="currency" id="currency" class="form-control" value="<?php echo htmlspecialchars($currentSettings['currency']); ?>">
+        </div>
 
-    <label for="tax_rate">Tax Rate (%):</label>
-    <input type="number" name="tax_rate" id="tax_rate" value="<?php echo $currentSettings['tax_rate']; ?>">
+        <div class="form-group">
+            <label for="language" class="form-label">Default Language:</label>
+            <input type="text" name="language" id="language" class="form-control" value="<?php echo htmlspecialchars($currentSettings['language']); ?>">
+        </div>
 
-    <button type="submit">Save Settings</button>
-</form>
+        <div class="form-group">
+            <label for="tax_rate" class="form-label">Tax Rate (%):</label>
+            <input type="number" name="tax_rate" id="tax_rate" class="form-control" value="<?php echo htmlspecialchars($currentSettings['tax_rate']); ?>">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Settings</button>
+    </form>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <?php include '../includes/internal/footer.php'; ?>

@@ -12,9 +12,10 @@ $pages = $page->readAll();
 include '../includes/internal/header.php';
 ?>
 
-<h2>Manage Pages</h2>
-<a href="add_page.php">Add New Page</a>
-<table>
+<h2 class="page-title">Manage Pages</h2>
+<a href="add_page.php" class="btn btn-primary mb-3">Add New Page</a>
+
+<table class="table table-striped table-bordered">
     <thead>
         <tr>
             <th>Title</th>
@@ -27,13 +28,13 @@ include '../includes/internal/header.php';
     <tbody>
         <?php while ($row = $pages->fetch(PDO::FETCH_ASSOC)) { ?>
             <tr>
-                <td><?php echo $row['title']; ?></td>
-                <td><?php echo $row['slug']; ?></td>
-                <td><?php echo $row['created_at']; ?></td>
-                <td><?php echo $row['updated_at']; ?></td>
+                <td><?php echo htmlspecialchars($row['title']); ?></td>
+                <td><?php echo htmlspecialchars($row['slug']); ?></td>
+                <td><?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($row['created_at']))); ?></td>
+                <td><?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($row['updated_at']))); ?></td>
                 <td>
-                    <a href="edit_page.php?id=<?php echo $row['id']; ?>">Edit</a>
-                    <a href="delete_page.php?id=<?php echo $row['id']; ?>">Delete</a>
+                    <a href="edit_page.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="delete_page.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         <?php } ?>
