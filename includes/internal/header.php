@@ -1,9 +1,10 @@
 <?php
 // Check if user is logged in and has necessary permissions
-if (!isset($_SESSION['admin_id'])) {
-    header("Location: login.php");
-    exit();
+if (!isset($_SESSION['admin_id']) && basename($_SERVER['PHP_SELF']) != 'login.php') {
+  header("Location: login.php");
+  exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

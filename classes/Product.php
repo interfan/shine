@@ -162,7 +162,7 @@ class Product {
 
     // In Product.php
 // In Product.php
-public function search($search, $categoryFilter, $priceMin, $priceMax, $stockStatus, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue, $limit, $offset) {
+public function search($search, $categoryFilter, $priceMin, $priceMax, $stock, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue, $limit, $offset) {
     $query = "SELECT * FROM products WHERE 1=1";
     
     if ($search) {
@@ -174,8 +174,8 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
     if ($priceMin || $priceMax) {
         $query .= " AND price BETWEEN :priceMin AND :priceMax";
     }
-    if ($stockStatus) {
-        $query .= " AND stock_status = :stockStatus";
+    if ($stock) {
+        $query .= " AND stock = :stock";
     }
     if ($color) {
         $query .= " AND color LIKE :color";
@@ -219,8 +219,8 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         $stmt->bindValue(':priceMin', $priceMin);
         $stmt->bindValue(':priceMax', $priceMax);
     }
-    if ($stockStatus) {
-        $stmt->bindValue(':stockStatus', $stockStatus);
+    if ($stock) {
+        $stmt->bindValue(':stock', $stock);
     }
     if ($color) {
         $stmt->bindValue(':color', '%' . $color . '%');
@@ -257,7 +257,7 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
     return $stmt;
 }
 
-    public function countAll($search = '', $categoryFilter = null, $priceMin = null, $priceMax = null, $stockStatus = null, $color = '', $size = '', $alloy = '', $gems = '', $sku = '', $isMaster = '', $isDisabled = '', $variationName = '', $variationValue = '') {
+    public function countAll($search = '', $categoryFilter = null, $priceMin = null, $priceMax = null, $stock = null, $color = '', $size = '', $alloy = '', $gems = '', $sku = '', $isMaster = '', $isDisabled = '', $variationName = '', $variationValue = '') {
         $query = "SELECT COUNT(*) FROM products WHERE 1=1";
         
         // Add filters if variables are provided
@@ -270,8 +270,8 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         if ($priceMin !== null || $priceMax !== null) {
             $query .= " AND price BETWEEN :priceMin AND :priceMax";
         }
-        if ($stockStatus !== null) {
-            $query .= " AND stock_status = :stockStatus";
+        if ($stock !== null) {
+            $query .= " AND stock = :stock";
         }
         if ($color) {
             $query .= " AND color LIKE :color";
@@ -316,8 +316,8 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         if ($priceMax !== null) {
             $stmt->bindValue(':priceMax', $priceMax);
         }
-        if ($stockStatus !== null) {
-            $stmt->bindValue(':stockStatus', $stockStatus);
+        if ($stock !== null) {
+            $stmt->bindValue(':stock', $stock);
         }
         if ($color) {
             $stmt->bindValue(':color', '%' . $color . '%');
