@@ -1,16 +1,6 @@
 <?php
 session_start();
-
-// Include database and class files
-include_once 'classes/Database.php';
-include_once 'classes/Product.php';
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// Initialize Product object
-$product = new Product($db);
+include './includes/commonclasses.php';
 
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

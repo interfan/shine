@@ -16,8 +16,9 @@ $category = new Category($db);
 $search = isset($_POST['search']) ? htmlspecialchars($_POST['search']) : '';
 $categoryFilter = isset($_POST['category']) ? htmlspecialchars($_POST['category']) : '';
 $priceMin = isset($_POST['price_min']) ? (float)$_POST['price_min'] : 0;
-$priceMax = isset($_POST['price_max']) ? (float)$_POST['price_max'] : PHP_INT_MAX;
-$stockStatus = isset($_POST['stock_status']) ? htmlspecialchars($_POST['stock_status']) : '';
+// Set default to PHP_INT_MAX if not provided
+$priceMax = isset($_POST['price_max']) ? (float)$_POST['price_max'] : '10000';
+$stock = isset($_POST['stock_status']) ? htmlspecialchars($_POST['stock_status']) : '';
 $color = isset($_POST['color']) ? htmlspecialchars($_POST['color']) : '';
 $size = isset($_POST['size']) ? htmlspecialchars($_POST['size']) : '';
 $alloy = isset($_POST['alloy']) ? htmlspecialchars($_POST['alloy']) : '';
@@ -30,7 +31,7 @@ $variationValue = isset($_POST['variationValue']) ? htmlspecialchars($_POST['var
 
 // Handle pagination parameters
 $itemsPerPage = 10;
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_POST['page']) ? htmlspecialchars($_POST['page']) : 1; //isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $itemsPerPage;
 
 // Fetch categories for filter options
@@ -42,8 +43,8 @@ while ($cat = $categories->fetch(PDO::FETCH_ASSOC)) {
 }
 
 // Fetch products with filters and pagination
-$products = $product->search($search, $categoryFilter, $priceMin, $priceMax, $stockStatus, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue, $itemsPerPage, $offset);
-$totalProducts = $product->countAll($search, $categoryFilter, $priceMin, $priceMax, $stockStatus, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue);
+$products = $product->search($search, $categoryFilter, $priceMin, $priceMax, $stock, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue, $itemsPerPage, $offset);
+$totalProducts = $product->countAll($search, $categoryFilter, $priceMin, $priceMax, $stock, $color, $size, $alloy, $gems, $sku, $isMaster, $isDisabled, $variationName, $variationValue);
 $totalPages = ceil($totalProducts / $itemsPerPage); 
 
 include '../includes/internal/header.php';
@@ -71,8 +72,8 @@ include '../includes/internal/header.php';
         <div class="form-group col-md-1">
             <select name="stock_status" class="form-control">
                 <option value="">Stock</option>
-                <option value="in_stock" <?php echo $stockStatus === 'in_stock' ? 'selected' : ''; ?>>In Stock</option>
-                <option value="out_of_stock" <?php echo $stockStatus === 'out_of_stock' ? 'selected' : ''; ?>>Out of Stock</option>
+                <option value="in_stock" <?php echo $stock === 'in_stock' ? 'selected' : ''; ?>>In Stock</option>
+                <option value="out_of_stock" <?php echo $stock === 'out_of_stock' ? 'selected' : ''; ?>>Out of Stock</option>
             </select>
         </div>
         <div class="form-group col-md-1">
@@ -181,18 +182,86 @@ include '../includes/internal/header.php';
     </tbody>
 </table>
 
-<!-- Pagination -->
-<nav aria-label="Page navigation" class="text-center">
-  <ul class="pagination justify-content-center">
-    <?php if ($page > 1) { ?>
-        <li class="page-item"><a class="page-link" href="products.php?page=<?php echo $page - 1; ?>">Previous</a></li>
-    <?php } ?>
-    <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
-        <li class="page-item<?php echo $i == $page ? ' active' : ''; ?>"><a class="page-link" href="products.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
-    <?php } ?>
-    <?php if ($page < $totalPages) { ?>
-        <li class="page-item"><a class="page-link" href="products.php?page=<?php echo $page + 1; ?>">Next</a></li>
-    <?php } ?>
-  </ul>
-</nav>
+<!-- Pagination Form -->
+<form id="paginationForm" method="post" action="products.php">
+    <!-- Hidden fields to retain search and filter parameters -->
+    <input type="hidden" name="search" value="<?php echo htmlspecialchars($search); ?>">
+    <input type="hidden" name="category" value="<?php echo htmlspecialchars($categoryFilter); ?>">
+    <input type="hidden" name="price_min" value="<?php echo htmlspecialchars($priceMin); ?>">
+    <input type="hidden" name="price_max" value="<?php echo htmlspecialchars($priceMax); ?>">
+    <input type="hidden" name="stock_status" value="<?php echo htmlspecialchars($stock); ?>">
+    <input type="hidden" name="color" value="<?php echo htmlspecialchars($color); ?>">
+    <input type="hidden" name="size" value="<?php echo htmlspecialchars($size); ?>">
+    <input type="hidden" name="alloy" value="<?php echo htmlspecialchars($alloy); ?>">
+    <input type="hidden" name="gems" value="<?php echo htmlspecialchars($gems); ?>">
+    <input type="hidden" name="sku" value="<?php echo htmlspecialchars($sku); ?>">
+    <input type="hidden" name="is_master" value="<?php echo htmlspecialchars($isMaster); ?>">
+    <input type="hidden" name="is_disabled" value="<?php echo htmlspecialchars($isDisabled); ?>">
+    <input type="hidden" name="variationName" value="<?php echo htmlspecialchars($variationName); ?>">
+    <input type="hidden" name="variationValue" value="<?php echo htmlspecialchars($variationValue); ?>">
+    <input type="hidden" name="page" id="pageField" value="<?php echo $page; ?>">
+
+    <!-- Pagination Links -->
+    <nav aria-label="Page navigation" class="text-center">
+        <ul class="pagination justify-content-center">
+
+            <!-- Previous Button -->
+            <?php if ($page > 1) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" onclick="submitPaginationForm(<?php echo $page - 1; ?>)">Previous</a>
+                </li>
+            <?php } ?>
+
+            <!-- First Page Link -->
+            <li class="page-item<?php echo $page == 1 ? ' active' : ''; ?>">
+                <a class="page-link" href="javascript:void(0);" onclick="submitPaginationForm(1)">1</a>
+            </li>
+
+            <!-- Dots if necessary before the current range -->
+            <?php if ($page > 6) { ?>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            <?php } ?>
+
+            <!-- Show 10 links centered around the current page -->
+            <?php
+            // Determine start and end for the pagination links
+            $start = max(2, $page - 5); // Start at least from page 2
+            $end = min($totalPages - 1, $page + 4); // End at least one before the last page
+            
+            for ($i = $start; $i <= $end; $i++) { ?>
+                <li class="page-item<?php echo $i == $page ? ' active' : ''; ?>">
+                    <a class="page-link" href="javascript:void(0);" onclick="submitPaginationForm(<?php echo $i; ?>)"><?php echo $i; ?></a>
+                </li>
+            <?php } ?>
+
+            <!-- Dots if necessary after the current range -->
+            <?php if ($page < $totalPages - 5) { ?>
+                <li class="page-item disabled"><span class="page-link">...</span></li>
+            <?php } ?>
+
+            <!-- Last Page Link -->
+            <?php if ($totalPages > 1) { ?>
+                <li class="page-item<?php echo $page == $totalPages ? ' active' : ''; ?>">
+                    <a class="page-link" href="javascript:void(0);" onclick="submitPaginationForm(<?php echo $totalPages; ?>)"><?php echo $totalPages; ?></a>
+                </li>
+            <?php } ?>
+
+            <!-- Next Button -->
+            <?php if ($page < $totalPages) { ?>
+                <li class="page-item">
+                    <a class="page-link" href="javascript:void(0);" onclick="submitPaginationForm(<?php echo $page + 1; ?>)">Next</a>
+                </li>
+            <?php } ?>
+        </ul>
+    </nav>
+</form>
+
+<!-- JavaScript to submit form on pagination click -->
+<script>
+function submitPaginationForm(page) {
+    document.getElementById('pageField').value = page; // Set the page number in the hidden field
+    document.getElementById('paginationForm').submit(); // Submit the form
+}
+</script>
+
 <?php include '../includes/internal/footer.php'; ?>

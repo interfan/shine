@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($product->update()) {
         // Handle image updates
         if (!empty($_FILES['images']['name'][0])) {
-            $productDir = '../assets/products/' . htmlspecialchars($product->name);
+            $productDir = '../assets/products/' . htmlspecialchars($product->name ?? '');
             if (!file_exists($productDir)) {
                 mkdir($productDir, 0777, true);
             }
@@ -139,58 +139,58 @@ include '../includes/internal/header.php';
 <h2>Edit Product</h2>
 
 <?php if ($successMessage): ?>
-    <p style="color: green;"><?php echo htmlspecialchars($successMessage); ?></p>
+    <p style="color: green;"><?php echo htmlspecialchars($successMessage ?? ''); ?></p>
 <?php endif; ?>
 
 <?php if ($errorMessage): ?>
-    <p style="color: red;"><?php echo htmlspecialchars($errorMessage); ?></p>
+    <p style="color: red;"><?php echo htmlspecialchars($errorMessage ?? ''); ?></p>
 <?php endif; ?>
 
-<form action="edit_product.php?id=<?php echo htmlspecialchars($product->id); ?>" method="post" enctype="multipart/form-data">
+<form action="edit_product.php?id=<?php echo htmlspecialchars($product->id ?? ''); ?>" method="post" enctype="multipart/form-data">
     <label for="name">Product Name:</label>
-    <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($product->name); ?>" required>
+    <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($product->name ?? ''); ?>" required>
 
     <label for="is_disabled">Disable Product:</label>
     <input type="checkbox" name="is_disabled" id="is_disabled" value="1" <?php echo $product->is_disabled ? 'checked' : ''; ?>>
 
     <label for="slug">Slug:</label>
-    <input type="text" name="slug" id="slug" value="<?php echo htmlspecialchars($product->slug); ?>" required>
+    <input type="text" name="slug" id="slug" value="<?php echo htmlspecialchars($product->slug ?? ''); ?>" required>
 
     <label for="description">Description:</label>
-    <textarea name="description" id="description" rows="4" required><?php echo htmlspecialchars($product->description); ?></textarea>
+    <textarea name="description" id="description" rows="4" required><?php echo htmlspecialchars($product->description ?? ''); ?></textarea>
 
     <label for="price">Price:</label>
-    <input type="number" step="0.01" name="price" id="price" value="<?php echo htmlspecialchars($product->price); ?>" required>
+    <input type="number" step="0.01" name="price" id="price" value="<?php echo htmlspecialchars($product->price ?? ''); ?>" required>
 
     <label for="category_id">Category:</label>
     <select name="category_id" id="category_id" required>
         <?php while ($row = $categories->fetch(PDO::FETCH_ASSOC)) { ?>
-            <option value="<?php echo htmlspecialchars($row['id']); ?>" <?php echo ($row['id'] == $product->category_id) ? 'selected' : ''; ?>>
-                <?php echo htmlspecialchars($row['name']); ?>
+            <option value="<?php echo htmlspecialchars($row['id'] ?? ''); ?>" <?php echo ($row['id'] == $product->category_id) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($row['name'] ?? ''); ?>
             </option>
         <?php } ?>
     </select>
 
     <label for="stock">Stock:</label>
-    <input type="number" name="stock" id="stock" value="<?php echo htmlspecialchars($product->stock); ?>" required>
+    <input type="number" name="stock" id="stock" value="<?php echo htmlspecialchars($product->stock ?? ''); ?>" required>
 
     <label for="video">Video URL:</label>
-    <input type="text" name="video" id="video" value="<?php echo htmlspecialchars($product->video); ?>">
+    <input type="text" name="video" id="video" value="<?php echo htmlspecialchars($product->video ?? ''); ?>">
 
     <label for="color">Color:</label>
-    <input type="text" name="color" id="color" value="<?php echo htmlspecialchars($product->color); ?>">
+    <input type="text" name="color" id="color" value="<?php echo htmlspecialchars($product->color ?? ''); ?>">
 
     <label for="size">Size:</label>
-    <input type="text" name="size" id="size" value="<?php echo htmlspecialchars($product->size); ?>">
+    <input type="text" name="size" id="size" value="<?php echo htmlspecialchars($product->size ?? ''); ?>">
 
     <label for="alloy">Alloy:</label>
-    <input type="text" name="alloy" id="alloy" value="<?php echo htmlspecialchars($product->alloy); ?>">
+    <input type="text" name="alloy" id="alloy" value="<?php echo htmlspecialchars($product->alloy ?? ''); ?>">
 
     <label for="gems">Gems:</label>
-    <input type="text" name="gems" id="gems" value="<?php echo htmlspecialchars($product->gems); ?>">
+    <input type="text" name="gems" id="gems" value="<?php echo htmlspecialchars($product->gems ?? ''); ?>">
 
     <label for="sku">SKU:</label>
-    <input type="text" name="sku" id="sku" value="<?php echo htmlspecialchars($product->sku); ?>">
+    <input type="text" name="sku" id="sku" value="<?php echo htmlspecialchars($product->sku ?? ''); ?>">
 
     <label for="is_master">Is Master Product:</label>
     <input type="checkbox" name="is_master" id="is_master" value="1" <?php echo $product->is_master ? 'checked' : ''; ?>>
@@ -204,7 +204,7 @@ include '../includes/internal/header.php';
     <?php } ?>
 
     <label for="master_product_id">Master Product ID:</label>
-    <input type="text" name="master_product_id" id="master_product_id" value="<?php echo htmlspecialchars($product->master_product_id ?? ''); ?>">
+    <input type="text" name="master_product_id" id="master_product_id" value="<?php echo htmlspecialchars($product->master_product_id ?? '' ?? ''); ?>">
 
     <label for="images">Product Images:</label>
     <input type="file" name="images[]" id="images" multiple>
@@ -217,8 +217,8 @@ include '../includes/internal/header.php';
             if ($connectedProducts) {
                 foreach ($connectedProducts as $connectedProduct) {
                     echo '<div>';
-                    echo '<p>' . htmlspecialchars($connectedProduct['name']) . '</p>';
-                    echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id) . '&remove_connection=' . htmlspecialchars($connectedProduct['id']) . '">Remove Connection</a>';
+                    echo '<p>' . htmlspecialchars($connectedProduct['name'] ?? '') . '</p>';
+                    echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_connection=' . htmlspecialchars($connectedProduct['id'] ?? '') . '">Remove Connection</a>';
                     echo '</div>';
                 }
             } else {
@@ -239,8 +239,8 @@ include '../includes/internal/header.php';
                 $masterProduct->id = $masterProductId;
                 $masterProduct->readOne();
                 echo '<div>';
-                echo '<p>' . htmlspecialchars($masterProduct->name) . '</p>';
-                echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id) . '&remove_master_connection=' . htmlspecialchars($masterProduct->id) . '">Remove Connection</a>';
+                echo '<p>' . htmlspecialchars($masterProduct->name ?? '') . '</p>';
+                echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_master_connection=' . htmlspecialchars($masterProduct->id ?? '') . '">Remove Connection</a>';
                 echo '</div>';
             } else {
                 echo '<div>None</div>';
@@ -257,15 +257,15 @@ include '../includes/internal/header.php';
 $images = $productImages->readByProduct($product->id);
 while ($image = $images->fetch(PDO::FETCH_ASSOC)) {
     echo '<div>';
-    echo '<img src="../assets/products/' . htmlspecialchars($product->name) . '/' . htmlspecialchars($image['image']) . '" width="100">';
+    echo '<img src="../assets/products/' . htmlspecialchars($product->name ?? '') . '/' . htmlspecialchars($image['image'] ?? '') . '" width="100">';
     if ($image['is_default']) {
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id) . '&remove_image=' . htmlspecialchars($image['id']) . '">Remove</a>';
+        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
         echo ' | ';
         echo '<strong>Default</strong>';
     } else {
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id) . '&remove_image=' . htmlspecialchars($image['id']) . '">Remove</a>';
+        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
         echo ' | ';
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id) . '&set_default=' . htmlspecialchars($image['id']) . '">Set as Default</a>';
+        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&set_default=' . htmlspecialchars($image['id'] ?? '') . '">Set as Default</a>';
     }
     echo '</div>';
 }

@@ -39,7 +39,7 @@ if (!isset($_SESSION['admin_id']) && basename($_SERVER['PHP_SELF']) != 'login.ph
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.min.css">
 
     <link rel="stylesheet" href="../assets/css/admin_styles.css">
-    <script src="https://cdn.tiny.cloud/1/i7y1tvw06lsbp3ylgt9q0mcxcc1f030zk5ghid2c240gst9e/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.9.2/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
   tinymce.init({
     selector: 'textarea',
@@ -60,6 +60,10 @@ if (!isset($_SESSION['admin_id']) && basename($_SERVER['PHP_SELF']) != 'login.ph
     ai_request: (request, respondWith) => respondWith.string(() => Promise.reject('See docs to implement AI Assistant')),
   });
 </script>
+<style>
+    .tox-notification--warning {display: none !important;}
+    .mce-notification {display: none !important;}
+</style>
 </head>
 <body class="home">
 <?php include 'navbar.php'; ?>

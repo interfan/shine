@@ -1,18 +1,6 @@
 <?php
 session_start();
-
-// Include database and class files
-include_once 'classes/Database.php';
-include_once 'classes/User.php';
-include_once 'classes/Order.php';
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// Initialize User and Order objects
-$user = new User($db);
-$order = new Order($db);
+include './includes/commonclasses.php';
 
 // Fetch user details if logged in
 if (isset($_SESSION['user_id'])) {

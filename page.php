@@ -1,15 +1,9 @@
 <?php
-include_once 'classes/Database.php';
-include_once 'classes/Content.php';
-
-$database = new Database();
-$db = $database->getConnection();
-
-$content = new Content($db);
+include './includes/commonclasses.php';
 
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];
-    $pageContent = $content->readOne($slug);
+    $pageContent = $page->readOne($slug);
 
     if ($pageContent) {
         $title = htmlspecialchars($pageContent['title']);
