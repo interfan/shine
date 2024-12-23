@@ -17,7 +17,7 @@ $search = isset($_POST['search']) ? htmlspecialchars($_POST['search']) : '';
 $categoryFilter = isset($_POST['category']) ? htmlspecialchars($_POST['category']) : '';
 $priceMin = isset($_POST['price_min']) ? (float)$_POST['price_min'] : 0;
 $priceMax = isset($_POST['price_max']) ? (float)$_POST['price_max'] : PHP_INT_MAX;
-$stockStatus = isset($_POST['stock_status']) ? htmlspecialchars($_POST['stock_status']) : '';
+$stockStatus = isset($_POST['stock_status']) ? htmlspecialchars($_POST['stock_status']) : 'in_stock';
 $color = isset($_POST['color']) ? htmlspecialchars($_POST['color']) : '';
 $size = isset($_POST['size']) ? htmlspecialchars($_POST['size']) : '';
 $alloy = isset($_POST['alloy']) ? htmlspecialchars($_POST['alloy']) : '';
@@ -38,7 +38,7 @@ $categories = $category->readAll();
 $categoryOptions = '<option value="">All Categories</option>';
 while ($cat = $categories->fetch(PDO::FETCH_ASSOC)) {
     $selected = $categoryFilter === $cat['id'] ? ' selected' : '';
-    $categoryOptions .= '<option value="' . htmlspecialchars($cat['id']) . '"' . $selected . '>' . htmlspecialchars($cat['name']) . '</option>';
+    $categoryOptions .= '<option value="' . htmlspecialchars($cat['id'] ?? '') . '"' . $selected . '>' . htmlspecialchars($cat['name'] ?? '') . '</option>';
 }
 
 // Fetch products with filters and pagination

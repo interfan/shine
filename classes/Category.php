@@ -81,6 +81,21 @@ class Category {
         }
     }
 
+    // Read a single category by slug
+    public function readOneBySlug() {
+        $query = "SELECT * FROM " . $this->table_name . " WHERE slug = :slug LIMIT 0,1";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':slug', $this->slug);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($row) {
+            $this->id = $row['id'];
+            $this->name = $row['name'];
+            $this->description = $row['description'];
+        }
+    }
+    
+
     // Update a category
     public function update() {
         $query = "UPDATE " . $this->table_name . " 

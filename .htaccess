@@ -1,0 +1,22 @@
+RewriteEngine On
+
+# 1. Exclude static files from rewrites
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+
+# 2. Redirect /page.php?slug=contact-us to /contact-us.html (for pages)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/page\.php\?slug=([^&\s]+) [NC]
+RewriteRule ^ /%1.html? [R=301,L]
+
+# 3. Redirect /category.php?slug=belt to /category/belt.html (for categories)
+RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s/categoryPage\.php\?slug=([^&\s]+) [NC]
+RewriteRule ^ /category/%1.html? [R=301,L]
+
+# 4. Internally rewrite /contact-us.html to page.php?slug=contact-us
+RewriteRule ^([a-zA-Z0-9-]+)\.html$ page.php?slug=$1 [L]
+
+# 5. Internally rewrite /category/belt.html to category.php?slug=belt (force slug pass)
+RewriteRule ^category/([a-zA-Z0-9-]+)\.html$ categoryPage.php?slug=$1 [L]
+

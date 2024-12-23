@@ -21,19 +21,29 @@ $limit = isset($_GET['items_per_page']) ? (int)$_GET['items_per_page'] : 12;
 $offset = ($page - 1) * $limit;
 $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : null;
 
-// Fetch category details
-$category->id = $category_id;
-$category->readOne();
+// Fetch featured products (for example, products with stock > 0)
+$stmt = $category->readAll();
+$categories_array = array();
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $categories_array[] = $row;
+}
 
+// Fetch category details
+// $category->id = $category_id;
+// $category->readOne();
+
+$category_slug = isset($_GET['slug']) ? $_GET['slug'] : '';
+$category->slug = $category_slug;
+$category->readOneBySlug();  // New method to fetch by slug
 // Fetch products in this category
-$stmt = $product->readAllByCategory($category_id, $limit, $offset, $sort_by);
+$stmt = $product->readAllByCategorySlug($category_slug, $limit, $offset, $sort_by);
 $products = array();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     if ($row['stock'] > 0 && !$row['is_disabled']) { // Optional: filter out disabled or out-of-stock products
         $products[] = $row;
     }
 }
-$total_products = $product->countAll();
+$total_products = $product->countAll('',$category->id);
 
 // Calculate total pages
 $total_pages = ceil($total_products / $limit);
@@ -45,6 +55,7 @@ $pageTitle = $category->name . ' - E-Commerce Site';
 include './includes/header.php'; // Include header
 
 ?>
+
 <div class="main-content main-content-product left-sidebar">
     <div class="container">
         <?php include './includes/breadcrumbs.php'; // Include footer ?>

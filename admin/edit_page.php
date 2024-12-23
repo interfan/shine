@@ -38,7 +38,7 @@ include '../includes/internal/header.php';
     <input type="text" name="slug" id="slug" value="<?php echo htmlspecialchars($page->slug); ?>" required>
 
     <label for="content">Content:</label>
-    <textarea name="content" id="content" required><?php echo htmlspecialchars($page->content); ?></textarea>
+    <textarea name="content" id="content"><?php echo $page->content; ?></textarea>
 
     <label for="is_disabled">
         <input type="checkbox" name="is_disabled" id="is_disabled" value="1" <?php echo $page->is_disabled ? 'checked' : ''; ?>>

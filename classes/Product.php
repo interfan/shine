@@ -174,8 +174,10 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
     if ($priceMin || $priceMax) {
         $query .= " AND price BETWEEN :priceMin AND :priceMax";
     }
-    if ($stockStatus) {
-        $query .= " AND stock_status = :stockStatus";
+    if ($stockStatus == 'in_stock') {
+        $query .= " AND stock > 0";
+    } else {
+        $query .= " AND stock = 0";
     }
     if ($color) {
         $query .= " AND color LIKE :color";
@@ -219,9 +221,6 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         $stmt->bindValue(':priceMin', $priceMin);
         $stmt->bindValue(':priceMax', $priceMax);
     }
-    if ($stockStatus) {
-        $stmt->bindValue(':stockStatus', $stockStatus);
-    }
     if ($color) {
         $stmt->bindValue(':color', '%' . $color . '%');
     }
@@ -257,7 +256,7 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
     return $stmt;
 }
 
-    public function countAll($search = '', $categoryFilter = null, $priceMin = null, $priceMax = null, $stockStatus = null, $color = '', $size = '', $alloy = '', $gems = '', $sku = '', $isMaster = '', $isDisabled = '', $variationName = '', $variationValue = '') {
+    public function countAll($search = '', $categoryFilter = null, $priceMin = null, $priceMax = null, $stockStatus = 'in_stock', $color = '', $size = '', $alloy = '', $gems = '', $sku = '', $isMaster = '', $isDisabled = '', $variationName = '', $variationValue = '') {
         $query = "SELECT COUNT(*) FROM products WHERE 1=1";
         
         // Add filters if variables are provided
@@ -270,8 +269,11 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         if ($priceMin !== null || $priceMax !== null) {
             $query .= " AND price BETWEEN :priceMin AND :priceMax";
         }
-        if ($stockStatus !== null) {
-            $query .= " AND stock_status = :stockStatus";
+        
+        if ($stockStatus == 'in_stock') {
+            $query .= " AND stock > 0";
+        } else {
+            $query .= " AND stock = 0";
         }
         if ($color) {
             $query .= " AND color LIKE :color";
@@ -315,9 +317,6 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         }
         if ($priceMax !== null) {
             $stmt->bindValue(':priceMax', $priceMax);
-        }
-        if ($stockStatus !== null) {
-            $stmt->bindValue(':stockStatus', $stockStatus);
         }
         if ($color) {
             $stmt->bindValue(':color', '%' . $color . '%');
@@ -480,6 +479,21 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         
         return $stmt;
     }
+
+    // Method to get all products by category slug
+    public function readAllByCategorySlug($slug, $limit, $offset, $sort_by) {
+        $query = "SELECT p.* FROM " . $this->table_name . " p 
+                  JOIN categories c ON p.category_id = c.id 
+                  WHERE c.slug = :slug 
+                  LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':slug', $slug);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+    
     
 
     // Sanitize input

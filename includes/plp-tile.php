@@ -13,7 +13,7 @@
             <div class="thumb-inner">
                 <a href="product.php?id=<?php echo $product['id']; ?>">
                     <!-- Display the product image -->
-                    <img src="assets/products/<?php echo $product['name'];?>/<?php echo htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($product['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
+                    <img src="/assets/products/<?php echo $product['name'];?>/<?php echo htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($product['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                 </a>
                 <div class="thumb-group">
                     <div class="yith-wcwl-add-to-wishlist">

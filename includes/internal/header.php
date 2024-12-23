@@ -41,13 +41,17 @@ if (!isset($_SESSION['admin_id'])) {
     <script src="https://cdn.tiny.cloud/1/i7y1tvw06lsbp3ylgt9q0mcxcc1f030zk5ghid2c240gst9e/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
   tinymce.init({
+    entity_encoding: 'raw',
+    valid_elements: '*[*]',
+    extended_valid_elements: 'script[src|type|async|defer],iframe[src|width|height|frameborder|allowfullscreen]',
+    forced_root_block: false,  // Don't wrap content in <p>
     selector: 'textarea',
     plugins: [
       // Core editing features
       'anchor', 'autolink', 'charmap', 'codesample', 'emoticons', 'image', 'link', 'lists', 'media', 'searchreplace', 'table', 'visualblocks', 'wordcount',
       // Your account includes a free trial of TinyMCE premium features
       // Try the most popular premium features until Sep 28, 2024:
-      'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
+      //'checklist', 'mediaembed', 'casechange', 'export', 'formatpainter', 'pageembed', 'a11ychecker', 'tinymcespellchecker', 'permanentpen', 'powerpaste', 'advtable', 'advcode', 'editimage', 'advtemplate', 'ai', 'mentions', 'tinycomments', 'tableofcontents', 'footnotes', 'mergetags', 'autocorrect', 'typography', 'inlinecss', 'markdown',
     ],
     toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
     tinycomments_mode: 'embedded',

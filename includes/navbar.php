@@ -57,7 +57,7 @@ session_start();
                 <div class="col-lg-3 col-sm-4 col-md-3 col-xs-7 col-ts-12 header-element">
                     <div class="logo">
                         <a href="index.html">
-                            <img src="assets/images/logo.png" alt="img">
+                            <img src="/assets/images/logo.png" alt="img">
                         </a>
                     </div>
                 </div>
@@ -102,7 +102,7 @@ session_start();
                                     <ul class="minicart-items">
                                         <li class="product-cart mini_cart_item">
                                             <a href="#" class="product-media">
-                                                <img src="assets/images/item-minicart-1.jpg" alt="img">
+                                                <img src="/assets/images/item-minicart-1.jpg" alt="img">
                                             </a>
                                             <div class="product-details">
                                                 <h5 class="product-name">
@@ -132,7 +132,7 @@ session_start();
                                         </li>
                                         <li class="product-cart mini_cart_item">
                                             <a href="#" class="product-media">
-                                                <img src="assets/images/item-minicart-2.jpg" alt="img">
+                                                <img src="/assets/images/item-minicart-2.jpg" alt="img">
                                             </a>
                                             <div class="product-details">
                                                 <h5 class="product-name">
@@ -162,7 +162,7 @@ session_start();
                                         </li>
                                         <li class="product-cart mini_cart_item">
                                             <a href="#" class="product-media">
-                                                <img src="assets/images/item-minicart-3.jpg" alt="img">
+                                                <img src="/assets/images/item-minicart-3.jpg" alt="img">
                                             </a>
                                             <div class="product-details">
                                                 <h5 class="product-name">
@@ -382,7 +382,7 @@ session_start();
         <div class="item mobile-logo">
             <div class="logo">
                 <a href="#">
-                    <img src="assets/images/logo.png" alt="img">
+                    <img src="/assets/images/logo.png" alt="img">
                 </a>
             </div>
         </div>

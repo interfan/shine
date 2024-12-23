@@ -32,7 +32,7 @@ include '../includes/internal/header.php';
     <input type="text" name="slug" id="slug" required>
 
     <label for="content">Content:</label>
-    <textarea name="content" id="content" required></textarea>
+    <textarea name="content" id="content"></textarea>
 
     <button type="submit">Add Page</button>
 </form>

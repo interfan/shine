@@ -1,19 +1,18 @@
 <?php
 include_once 'classes/Database.php';
-include_once 'classes/Content.php';
+include_once 'classes/Page.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$content = new Content($db);
+$content = new Page($db);
 
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];
     $pageContent = $content->readOne($slug);
-
     if ($pageContent) {
-        $title = htmlspecialchars($pageContent['title']);
-        $body = htmlspecialchars($pageContent['content']);
+        $title = htmlspecialchars($pageContent['title'] ?? '');
+        $body = $pageContent['content'];
     } else {
         echo "Content not found.";
         exit;
@@ -22,17 +21,19 @@ if (isset($_GET['slug'])) {
     echo "No content slug provided.";
     exit;
 }
+
+include './includes/header.php'; // Include header
+
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo $title; ?></title>
-</head>
-<body>
-    <h1><?php echo $title; ?></h1>
-    <div><?php echo nl2br($body); ?></div>
-</body>
-</html>
+<div class="main-content main-content-product left-sidebar">
+    <div class="container">
+        <?php include './includes/breadcrumbs.php'; // Include footer ?>
+        <div class="row">
+            <h1><?php echo $title; ?></h1>
+            <div><?php echo html_entity_decode(html_entity_decode($body)); ?></div>
+        </div>
+    </div>
+</div>
+
+<?php include './includes/footer.php'; // Include footer ?>

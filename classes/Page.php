@@ -50,7 +50,7 @@ class Page {
         // Sanitize input
         $this->title = htmlspecialchars(strip_tags($this->title));
         $this->slug = htmlspecialchars(strip_tags($this->slug));
-        $this->content = htmlspecialchars(strip_tags($this->content));
+        $this->content = $this->content;
         $this->is_disabled = $this->is_disabled ?? 0; // Default to 0 if not set
 
         // Bind parameters
@@ -81,21 +81,14 @@ class Page {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':slug', $slug);
         $stmt->execute();
-
+    
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
-            $this->id = $row['id'];
-            $this->title = $row['title'];
-            $this->slug = $row['slug'];
-            $this->content = $row['content'];
-            $this->is_disabled = $row['is_disabled'];
-            $this->created_at = $row['created_at'];
-            $this->updated_at = $row['updated_at'];
-            return true;
+            return $row;
         }
-
         return false;
     }
+    
 
     // Update a page
     public function update() {
