@@ -7,7 +7,6 @@ $database = new Database();
 $db = $database->getConnection();
 
 $admin = new Admin($db);
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $admin->username = $_POST['username'];
     $admin->password = $_POST['password'];

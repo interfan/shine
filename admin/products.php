@@ -173,8 +173,8 @@ include '../includes/internal/header.php';
                 <td><?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($row['created_at']))); ?></td>
                 <td><?php echo htmlspecialchars(date('Y-m-d H:i:s', strtotime($row['updated_at']))); ?></td>
                 <td>
-                    <a href="edit_product.php?id=<?php echo $row['id']; ?>" class="btn btn-warning btn-sm">Edit</a>
-                    <a href="delete_product.php?id=<?php echo $row['id']; ?>" class="btn btn-danger btn-sm">Delete</a>
+                    <a href="edit_product.php?slug=<?php echo $row['slug']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="delete_product.php?slug=<?php echo $row['slug']; ?>" class="btn btn-danger btn-sm">Delete</a>
                 </td>
             </tr>
         <?php } ?>

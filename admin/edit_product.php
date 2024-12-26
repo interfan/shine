@@ -12,7 +12,7 @@ $product = new Product($db);
 $productImages = new ProductImages($db);
 $category = new Category($db);
 
-$product->id = $_GET['id'];
+$product->slug = $_GET['slug'];
 
 // Check if readOne() was successful
 if (!$product->readOne()) {

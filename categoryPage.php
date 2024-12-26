@@ -27,7 +27,6 @@ $categories_array = array();
 while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
     $categories_array[] = $row;
 }
-
 // Fetch category details
 // $category->id = $category_id;
 // $category->readOne();

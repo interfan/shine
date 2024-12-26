@@ -11,7 +11,7 @@
         </div>
         <div class="product-thumb">
             <div class="thumb-inner">
-                <a href="product.php?id=<?php echo $product['id']; ?>">
+                <a href="/product/<?php echo $product['slug']; ?>.html">
                     <!-- Display the product image -->
                     <img src="/assets/products/<?php echo $product['name'];?>/<?php echo htmlspecialchars($product['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($product['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?>">
                 </a>
@@ -21,7 +21,7 @@
                             <a href="wishlist.php?add=<?php echo $product['id']; ?>">Add to Wishlist</a>
                         </div>
                     </div>
-                    <a href="quickview.php?id=<?php echo $product['id']; ?>" class="button quick-wiew-button">Quick View</a>
+                    <a href="quickview.php?id=<?php echo $product['slug']; ?>" class="button quick-wiew-button">Quick View</a>
                     <div class="loop-form-add-to-cart">
                         <form method="post" action="cart.php">
                             <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
@@ -33,7 +33,7 @@
         </div>
         <div class="product-info">
             <h5 class="product-name product_title">
-                <a href="product.php?id=<?php echo $product['id']; ?>"><?php echo htmlspecialchars($product['name']); ?></a>
+                <a href="/product/<?php echo $product['slug']; ?>.html"><?php echo htmlspecialchars($product['name']); ?></a>
             </h5>
             <div class="group-info">
                 <div class="stars-rating">

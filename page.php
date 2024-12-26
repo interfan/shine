@@ -1,11 +1,18 @@
 <?php
 include_once 'classes/Database.php';
 include_once 'classes/Page.php';
+include_once 'classes/Category.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
 $content = new Page($db);
+
+$category = new Category($db);
+$stmt = $category->readAll();
+while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+    $categories_array[] = $row;
+}
 
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];

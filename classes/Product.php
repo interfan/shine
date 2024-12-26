@@ -99,11 +99,11 @@ class Product {
          $query = "SELECT p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, p.video, p.color, p.size, p.alloy, p.gems, p.is_master, p.master_product_id, p.is_disabled, p.variation_name, p.variation_value, i.image
                 FROM " . $this->table_name . " p
                 LEFT JOIN product_images i ON p.id = i.product_id AND i.is_default = 1
-                WHERE p.id = :id
+                WHERE p.slug = :slug
                 LIMIT 0,1";
         
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $this->id);
+        $stmt->bindParam(':slug', $this->slug);
         
         if ($stmt->execute()) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -139,6 +139,7 @@ class Product {
             return false;
         }
     }
+    
 
     // Method to disable a product
     public function disable() {
@@ -481,20 +482,34 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
     }
 
     // Method to get all products by category slug
+    // Method to get all products by category slug with sorting
     public function readAllByCategorySlug($slug, $limit, $offset, $sort_by) {
+        // Default sorting
+        $order_by = "p.id DESC";  // Default to most recent or highest ID
+
+        // Determine sorting based on input
+        if ($sort_by === 'price_asc') {
+            $order_by = "p.price ASC";
+        } elseif ($sort_by === 'price_desc') {
+            $order_by = "p.price DESC";
+        }
+
+        // SQL query with dynamic ORDER BY
         $query = "SELECT p.* FROM " . $this->table_name . " p 
-                  JOIN categories c ON p.category_id = c.id 
-                  WHERE c.slug = :slug 
-                  LIMIT :limit OFFSET :offset";
+                JOIN categories c ON p.category_id = c.id 
+                WHERE c.slug = :slug 
+                ORDER BY $order_by
+                LIMIT :limit OFFSET :offset";
+
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':slug', $slug);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
+        
         return $stmt;
     }
-    
-    
+
 
     // Sanitize input
     private function sanitize($input) {

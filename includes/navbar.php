@@ -71,7 +71,7 @@ session_start();
                                         <option value="category.php">All Categories</option>
                                         <?php foreach ($categories_array as $cat):
                                             if ($cat['parent_id'] === 0) { ?>
-                                                <option value="/categoryPage.php?id=<?php echo $cat['id']; ?>">
+                                                <option value="/category/<?php echo $cat['slug']; ?>.html">
                                                     <?php echo htmlspecialchars($cat['name']); ?></option>
                                                 <?php }
                                         endforeach; ?>
@@ -295,19 +295,19 @@ session_start();
                             if ($cat['parent_id'] === 0) {
                                 if ($subcategories[1] > 0) { ?>
                                     <li class="menu-item menu-item-has-children">
-                                        <a title="<?php echo htmlspecialchars($cat['name']); ?>" href="/categoryPage.php?slug=<?php echo $cat['slug']; ?>" class="ysera-menu-item-title"><?php echo htmlspecialchars($cat['name']); ?></a>
+                                        <a title="<?php echo htmlspecialchars($cat['name']); ?>" href="/category/<?php echo $cat['slug']; ?>.html" class="ysera-menu-item-title"><?php echo htmlspecialchars($cat['name']); ?></a>
                                         <span class="toggle-submenu"></span>
                                         <ul role="menu" class=" submenu">
                                             <?php while ($row = $subcategories[0]->fetch(PDO::FETCH_ASSOC)) { ?>
                                                 <li class="menu-item">
-                                                    <a title="<?php echo htmlspecialchars($row['name']); ?>" href="/categoryPage.php?slug=<?php echo $row['id']; ?>" class="ysera-item-title"><?php echo htmlspecialchars($row['name']); ?></a>
+                                                    <a title="<?php echo htmlspecialchars($row['name']); ?>" href="/category/<?php echo $row['slug']; ?>.html" class="ysera-item-title"><?php echo htmlspecialchars($row['name']); ?></a>
                                                 </li>
                                             <?php } ?>
                                         </ul>
                                     </li>
                                 <?php } else { ?>
                                     <li class="menu-item"><?php $cat['name']; ?>
-                                        <a href="/categoryPage.php?slug=<?php echo $cat['slug']; ?>" class="ysera-menu-item-title" title="<?php echo htmlspecialchars($cat['name']); ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
+                                        <a href="/category/<?php echo $cat['slug']; ?>.html" class="ysera-menu-item-title" title="<?php echo htmlspecialchars($cat['name']); ?>"><?php echo htmlspecialchars($cat['name']); ?></a>
                                     </li>
                                 <?php }
                             } ?>

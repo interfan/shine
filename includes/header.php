@@ -27,6 +27,3 @@
 </head>
 <body class="home">
 <?php include 'navbar.php'; ?>
-<?php 
-//var_dump($categories_array);
-?>
