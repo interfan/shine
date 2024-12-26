@@ -1,8 +1,3 @@
-<?php
-session_start();
-?>
-
-
 <header class="header style7">
     <div class="top-bar">
         <div class="container">
@@ -41,10 +36,12 @@ session_start();
                     <li>
                         <?php if (isset($_SESSION['user_id'])) { ?>
                         <a href="account.php">My Account</a> |
-                        <a href="logout.php">Logout</a>
+                        <form method="POST" action="account.php" style="display:inline;">
+                            <button type="submit" name="logout" class="logout-link">Logout</button>
+                        </form>
                         <?php } else { ?>
                         <a href="login.php">Login</a> |
-                        <a href="register.php">Register</a>
+                        <a href="login.php">Register</a>
                         <?php } ?>
                     </li>
                 </ul>
@@ -221,8 +218,7 @@ session_start();
                                             <a data-toggle="tab" aria-expanded="true" href="#header-tab-login">Login</a>
                                         </li>
                                         <li>
-                                            <a data-toggle="tab" aria-expanded="true"
-                                                href="#header-tab-rigister">Register</a>
+                                            <a href="login.php">Register</a>
                                         </li>
                                     </ul>
                                     <div class="tab-container">
@@ -244,7 +240,7 @@ session_start();
                                                     <input type="submit" class="button" value="Login">
                                                 </p>
                                                 <p class="lost_password">
-                                                    <a href="#">Lost your password?</a>
+                                                    <a href="forgot_password.php">Lost your password?</a>
                                                 </p>
                                             </form>
                                         </div>

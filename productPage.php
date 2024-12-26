@@ -1,18 +1,15 @@
 <?php
+// Start the session
+session_start();
 // Include database and class files
 include_once 'classes/Database.php';
 include_once 'classes/Product.php';
-include_once 'classes/Category.php';
 
 // Initialize database connection
 $database = new Database();
 $db = $database->getConnection();
 
-$category = new Category($db);
-$stmt = $category->readAll();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $categories_array[] = $row;
-}
+include './includes/helper.php';
 
 // Initialize Product object
 $product = new Product($db);

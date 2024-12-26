@@ -1,6 +1,7 @@
 <?php
+// Start the session
+session_start();
 include_once 'classes/Database.php';
-include_once 'classes/Category.php';
 include_once 'classes/Product.php';
 
 // Initialize database connection
@@ -8,15 +9,9 @@ $database = new Database();
 $db = $database->getConnection();
 
 // Initialize Category and Product objects
-$category = new Category($db);
 $product = new Product($db);
 
-// Fetch featured products (for example, products with stock > 0)
-$stmt = $category->readAll();
-$categories_array = array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $categories_array[] = $row;
-}
+include './includes/helper.php';
 
 // Fetch featured products (for example, products with stock > 0)
 $stmt = $product->readAll();

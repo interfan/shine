@@ -1,7 +1,8 @@
 <?php
+// Start the session
+session_start();
 // Include database and class files
 include_once 'classes/Database.php';
-include_once 'classes/Category.php';
 include_once 'classes/Product.php';
 
 // Initialize database connection
@@ -9,7 +10,7 @@ $database = new Database();
 $db = $database->getConnection();
 
 // Initialize Category and Product objects
-$category = new Category($db);
+include './includes/helper.php';
 $product = new Product($db);
 
 // Get category ID from query string
@@ -22,11 +23,7 @@ $offset = ($page - 1) * $limit;
 $sort_by = isset($_GET['sort_by']) ? $_GET['sort_by'] : null;
 
 // Fetch featured products (for example, products with stock > 0)
-$stmt = $category->readAll();
-$categories_array = array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-    $categories_array[] = $row;
-}
+
 // Fetch category details
 // $category->id = $category_id;
 // $category->readOne();
