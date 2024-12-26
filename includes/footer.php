@@ -172,41 +172,6 @@
 <script src="/assets/js/jquery.scrollbar.min.js"></script>
 <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyC3nDHy1dARR-Pa_2jjPCjvsOR4bcILYsM'></script>
 <script src="/assets/js/frontend-plugin.js"></script>
-
-
-<script>
-    $(document).ready(function() {
-        function updateQueryParams(param, value) {
-            var url = new URL(window.location.href);
-            var params = new URLSearchParams(url.search);
-
-            if (value) {
-                params.set(param, value);
-            } else {
-                params.delete(param);
-            }
-
-            window.location.search = params.toString();
-        }
-
-        // Update URL when items per page selection changes
-        $('#items-per-page').on('change', function() {
-            var itemsPerPage = $(this).val();
-            updateQueryParams('items_per_page', itemsPerPage);
-        });
-
-        // Update URL when sort by selection changes
-        $('#sort-by').on('change', function() {
-            var sortBy = $(this).val();
-            updateQueryParams('sort_by', sortBy);
-        });
-
-        // If you have chosen plugin initialization code, ensure it is placed correctly
-        $('.chosen-select').chosen();
-    });
-
-
-
-</script>
+<script src="/assets/js/app.js"></script>
 </body>
 </html>
