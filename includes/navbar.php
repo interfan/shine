@@ -35,13 +35,13 @@
                 <ul class="header-user-links">
                     <li>
                         <?php if (isset($_SESSION['user_id'])) { ?>
-                        <a href="account.php">My Account</a> |
-                        <form method="POST" action="account.php" style="display:inline;">
+                        <a href="/account.php">My Account</a> |
+                        <form method="POST" action="/account.php" style="display:inline;">
                             <button type="submit" name="logout" class="logout-link">Logout</button>
                         </form>
                         <?php } else { ?>
-                        <a href="login.php">Login</a> |
-                        <a href="login.php">Register</a>
+                        <a href="/login.php">Login</a> |
+                        <a href="/login.php">Register</a>
                         <?php } ?>
                     </li>
                 </ul>
@@ -336,7 +336,7 @@
                                                         <a href="404page.html">404</a>
                                                     </li>
                                                     <li class="menu-item">
-                                                        <a href="login.html">Login/Register</a>
+                                                        <a href="/login.html">Login/Register</a>
                                                     </li>
                                                 </ul>
                                             </div>

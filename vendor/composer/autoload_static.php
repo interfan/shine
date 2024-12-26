@@ -22,10 +22,12 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         ),
         'P' => 
         array (
+            'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Cache\\' => 10,
+            'Phpfastcache\\' => 13,
             'ParagonIE\\ConstantTime\\' => 23,
         ),
         'M' => 
@@ -53,6 +55,10 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         array (
             0 => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib',
         ),
+        'Psr\\SimpleCache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/psr/simple-cache/src',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
@@ -69,6 +75,10 @@ class ComposerStaticInit5cd48b6645860e6f71f44390d4549abe
         'Psr\\Cache\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
+        ),
+        'Phpfastcache\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpfastcache/phpfastcache/lib/Phpfastcache',
         ),
         'ParagonIE\\ConstantTime\\' => 
         array (

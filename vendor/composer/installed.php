@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'cce5afc9cf3e719ae273425bd41cfe670416454d',
+        'reference' => '0a6a6f6e55ca3d2b861b94c6b384f4da63bcfad8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'cce5afc9cf3e719ae273425bd41cfe670416454d',
+            'reference' => '0a6a6f6e55ca3d2b861b94c6b384f4da63bcfad8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -118,6 +118,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'phpfastcache/phpfastcache' => array(
+            'pretty_version' => '9.2.3',
+            'version' => '9.2.3.0',
+            'reference' => '372d62e0bbab5bcfac6404dc912040b038a3afb7',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpfastcache/phpfastcache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'phpseclib/phpseclib' => array(
             'pretty_version' => '3.0.43',
             'version' => '3.0.43.0',
@@ -135,6 +144,12 @@
             'install_path' => __DIR__ . '/../psr/cache',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'psr/cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '2.0|3.0',
+            ),
         ),
         'psr/http-client' => array(
             'pretty_version' => '1.0.3',
@@ -194,6 +209,21 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '3.0.0',
+            ),
+        ),
+        'psr/simple-cache' => array(
+            'pretty_version' => '3.0.0',
+            'version' => '3.0.0.0',
+            'reference' => '764e0b3939f5ca87cb904f570ef9be2d78a07865',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../psr/simple-cache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'psr/simple-cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '2.0|3.0',
             ),
         ),
         'ralouphie/getallheaders' => array(
