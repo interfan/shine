@@ -1,15 +1,17 @@
 <?php
 // Start the session
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Page.php';
-
-$database = new Database();
-$db = $database->getConnection();
-
-$content = new Page($db);
-
 include './includes/helper.php';
+
+// Get shared database connection
+$db = getDatabaseConnection();
+
+$category = getCategoryInstance($db);
+
+// Fetch categories
+$categories_array = getAllCategories($db);
+
+$page = getPageInstance($db);
 
 if (isset($_GET['slug'])) {
     $slug = $_GET['slug'];

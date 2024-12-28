@@ -1,13 +1,15 @@
 <?php
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Account.php';
 require 'vendor/autoload.php';
+include './includes/helper.php';
 
-// Initialize DB connection
-$database = new Database();
-$db = $database->getConnection();
-$account = new Account($db);
+$db = getDatabaseConnection();
+
+$category = getCategoryInstance($db);
+
+$categories_array = getAllCategories($db);
+
+$account = getAccountInstance($db);
 
 $login_error = $register_success = $register_error = "";
 

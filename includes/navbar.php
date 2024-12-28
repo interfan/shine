@@ -90,112 +90,13 @@
                             <a href="javascript:void(0);" class="shopcart-icon" data-ysera="ysera-dropdown">
                                 Cart
                                 <span class="count">
-                                    0
+                                    <?php echo count($_SESSION['cart'] ?? []); ?>
                                 </span>
                             </a>
                             <div class="shopcart-description ysera-submenu">
                                 <div class="content-wrap">
                                     <h3 class="title">Shopping Cart</h3>
-                                    <ul class="minicart-items">
-                                        <li class="product-cart mini_cart_item">
-                                            <a href="#" class="product-media">
-                                                <img src="/assets/images/item-minicart-1.jpg" alt="img">
-                                            </a>
-                                            <div class="product-details">
-                                                <h5 class="product-name">
-                                                    <a href="#">Drop Earrings</a>
-                                                </h5>
-                                                <div class="variations">
-                                                    <span class="attribute_color">
-                                                        <a href="#">Black</a>
-                                                    </span>
-                                                    ,
-                                                    <span class="attribute_size">
-                                                        <a href="#">300ml</a>
-                                                    </span>
-                                                </div>
-                                                <span class="product-price">
-                                                    <span class="price">
-                                                        <span>$45</span>
-                                                    </span>
-                                                </span>
-                                                <span class="product-quantity">
-                                                    (x1)
-                                                </span>
-                                                <div class="product-remove">
-                                                    <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="product-cart mini_cart_item">
-                                            <a href="#" class="product-media">
-                                                <img src="/assets/images/item-minicart-2.jpg" alt="img">
-                                            </a>
-                                            <div class="product-details">
-                                                <h5 class="product-name">
-                                                    <a href="#">Soap Earrings Solutions</a>
-                                                </h5>
-                                                <div class="variations">
-                                                    <span class="attribute_color">
-                                                        <a href="#">Black</a>
-                                                    </span>
-                                                    ,
-                                                    <span class="attribute_size">
-                                                        <a href="#">300ml</a>
-                                                    </span>
-                                                </div>
-                                                <span class="product-price">
-                                                    <span class="price">
-                                                        <span>$45</span>
-                                                    </span>
-                                                </span>
-                                                <span class="product-quantity">
-                                                    (x1)
-                                                </span>
-                                                <div class="product-remove">
-                                                    <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li class="product-cart mini_cart_item">
-                                            <a href="#" class="product-media">
-                                                <img src="/assets/images/item-minicart-3.jpg" alt="img">
-                                            </a>
-                                            <div class="product-details">
-                                                <h5 class="product-name">
-                                                    <a href="#">Earrings Solutions Soap</a>
-                                                </h5>
-                                                <div class="variations">
-                                                    <span class="attribute_color">
-                                                        <a href="#">Black</a>
-                                                    </span>
-                                                    ,
-                                                    <span class="attribute_size">
-                                                        <a href="#">300ml</a>
-                                                    </span>
-                                                </div>
-                                                <span class="product-price">
-                                                    <span class="price">
-                                                        <span>$45</span>
-                                                    </span>
-                                                </span>
-                                                <span class="product-quantity">
-                                                    (x1)
-                                                </span>
-                                                <div class="product-remove">
-                                                    <a href=""><i class="fa fa-trash-o" aria-hidden="true"></i></a>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <div class="subtotal">
-                                        <span class="total-title">Subtotal: </span>
-                                        <span class="total-price">
-                                            <span class="Price-amount">
-                                                $135
-                                            </span>
-                                        </span>
-                                    </div>
+                                    <?php include 'minicart.php'; ?>
                                     <div class="actions">
                                         <a class="button button-viewcart" href="shoppingcart.html">
                                             <span>View Bag</span>

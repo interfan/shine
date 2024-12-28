@@ -27,62 +27,66 @@ $(document).ready(function() {
     // If you have chosen plugin initialization code, ensure it is placed correctly
     $('.chosen-select').chosen();
 
-    // Add to Cart button click event
-    $('.addToCartBtn').click(function() {
-        var productId = 1; // Replace with actual product ID
+    $('.add-to-cart-btn').on('click', function(e) {
+        e.preventDefault();
+        let product_id = $(this).data('id');
+        let quantity = $('#product-qty').val() || 1;
+
         $.ajax({
-            type: "POST",
-            url: "addtocart.php",
-            data: { action: "add", productId: productId },
-            success: function() {
-                loadCart();
-                updateMinicart(); 
+            type: 'POST',
+            url: 'cart.php',
+            data: {
+                add_to_cart: true,
+                product_id: product_id,
+                quantity: quantity
+            },
+            success: function(response) {
+                $('.cart-content').html(response);  // Update mini-cart dynamically
+                alert('Product added to cart!');
+            },
+            error: function() {
+                alert('Failed to add product to cart.');
             }
         });
     });
 
-    // Delete from Cart button click event
-    $(document).on('click', '.deleteFromCartBtn', function() {
-        var productId = $(this).data('productId');
-        $.ajax({
-            type: "POST",
-            url: "addtocart.php",
-            data: { action: "delete", productId: productId },
-            success: function() {
-                loadCart();
-                updateMinicart(); 
-            }
-        });
+    // Quantity increment/decrement on PDP
+    $('.btn-number').on('click', function(e) {
+        e.preventDefault();
+        let qtyInput = $(this).siblings('input');
+        let currentQty = parseInt(qtyInput.val()) || 1;
+
+        if ($(this).hasClass('qtyplus')) {
+            qtyInput.val(currentQty + 1);
+        } else if ($(this).hasClass('qtyminus') && currentQty > 1) {
+            qtyInput.val(currentQty - 1);
+        }
     });
 
-    // Update Quantity input change event
-    $(document).on('change', '.quantityInput', function() {
-        var productId = $(this).data('productId');
-        var quantity = $(this).val();
+    // Update mini-cart count
+    function updateCartCount() {
         $.ajax({
-            type: "POST",
-            url: "addtocart.php",
-            data: { action: "update", productId: productId, quantity: quantity },
-            success: function() {
-                loadCart();
-                updateMinicart(); 
+            url: 'minicart.php',
+            success: function(response) {
+                let count = $(response).find('.minicart-items li').length;
+                $('.cart-count').text(count);
             }
-        });
-    });
-
-    // Load cart initially
-    loadCart();
-
-    function loadCart() {
-        $.get("getcart.php", function(data) {
-            $("#cartTable tbody").html(data); 
         });
     }
 
-    // Function to update the minicart display
-    function updateMinicart() {
-        $.get("get_minicart_data.php", function(data) {
-            $("#minicart").html(data);
+    // Remove item asynchronously
+    $(document).on('submit', '.remove-item-form', function(e) {
+        e.preventDefault();
+        var form = $(this);
+        $.ajax({
+            type: 'POST',
+            url: 'cart.php',
+            data: form.serialize(),
+            success: function(response) {
+                $('.cart-content').html(response);
+                updateCartCount();
+            }
         });
-    }
+    });
+
 });

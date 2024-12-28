@@ -1,18 +1,16 @@
 <?php
-// Start the session
 session_start();
-// Include database and class files
-include_once 'classes/Database.php';
-include_once 'classes/Product.php';
 
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
+session_start();
 include './includes/helper.php';
 
-// Initialize Product object
-$product = new Product($db);
+$db = getDatabaseConnection();
+
+$category = getCategoryInstance($db);
+
+$categories_array = getAllCategories($db);
+
+$product = getProductInstance($db);
 
 // Get product ID from query string
 $slug = isset($_GET['slug']) ? $_GET['slug'] : 0;
@@ -78,7 +76,7 @@ include './includes/header.php'; // Include header
 												<a href="#" class="btn-number qtyplus quantity-plus">+</a>
 											</div>
 										</div>
-										<button class="single_add_to_cart_button button">Add to cart</button>
+										<button class="single_add_to_cart_button button add-to-cart-btn">Add to cart</button>
 									</div>
 								</div>
 							</div>

@@ -517,5 +517,37 @@ public function search($search, $categoryFilter, $priceMin, $priceMax, $stockSta
         $input = $input ?? ''; // Convert null to an empty string
         return strip_tags($input);
     }
+
+    public function readOneById() {
+        $query = "SELECT p.id, p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, p.video, p.color, p.size, p.alloy, p.gems, i.image
+                  FROM " . $this->table_name . " p
+                  LEFT JOIN product_images i ON p.id = i.product_id AND i.is_default = 1
+                  WHERE p.id = :id
+                  LIMIT 0,1";
+        
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(':id', $this->id);
+        
+        if ($stmt->execute()) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($row) {
+                $this->name = $row['name'];
+                $this->slug = $row['slug'];
+                $this->sku = $row['sku'];
+                $this->description = $row['description'];
+                $this->price = $row['price'];
+                $this->category_id = $row['category_id'];
+                $this->stock = $row['stock'];
+                $this->video = $row['video'];
+                $this->color = $row['color'];
+                $this->size = $row['size'];
+                $this->alloy = $row['alloy'];
+                $this->gems = $row['gems'];
+                $this->image = $row['image'];
+                return true;
+            }
+        }
+        return false;
+    }
 }
 ?>
