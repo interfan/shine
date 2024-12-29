@@ -1,7 +1,7 @@
 <?php
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Account.php';
+require 'vendor/autoload.php';
+include './includes/helper.php';
 
 // Logout Logic
 if (isset($_POST['logout'])) {
@@ -16,10 +16,10 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Initialize DB connection
-$database = new Database();
-$db = $database->getConnection();
-$account = new Account($db);
+$db = getDatabaseConnection();
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$account = getAccountInstance($db);
 
 include './includes/helper.php';
 

@@ -2,13 +2,9 @@
 session_start();
 require 'vendor/autoload.php';
 include './includes/helper.php';
-
 $db = getDatabaseConnection();
-
 $category = getCategoryInstance($db);
-
 $categories_array = getAllCategories($db);
-
 $account = getAccountInstance($db);
 
 $login_error = $register_success = $register_error = "";

@@ -1,15 +1,9 @@
 <?php
 session_start();
-
-session_start();
 include './includes/helper.php';
-
 $db = getDatabaseConnection();
-
 $category = getCategoryInstance($db);
-
 $categories_array = getAllCategories($db);
-
 $product = getProductInstance($db);
 
 // Get product ID from query string

@@ -2,10 +2,9 @@
 session_start();
 include './includes/helper.php';
 $db = getDatabaseConnection();
-
 $category = getCategoryInstance($db);
-
 $categories_array = getAllCategories($db);
+
 
 $pageTitle = 'Shopping Cart - E-Commerce Site';
 

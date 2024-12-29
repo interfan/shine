@@ -35,13 +35,13 @@
                 <ul class="header-user-links">
                     <li>
                         <?php if (isset($_SESSION['user_id'])) { ?>
-                        <a href="/account.php">My Account</a> |
-                        <form method="POST" action="/account.php" style="display:inline;">
+                        <a href="/account.html">My Account</a> |
+                        <form method="POST" action="/account.html" style="display:inline;">
                             <button type="submit" name="logout" class="logout-link">Logout</button>
                         </form>
                         <?php } else { ?>
-                        <a href="/login.php">Login</a> |
-                        <a href="/login.php">Register</a>
+                        <a href="/login.html">Login</a> |
+                        <a href="/login.html">Register</a>
                         <?php } ?>
                     </li>
                 </ul>
@@ -98,10 +98,10 @@
                                     <h3 class="title">Shopping Cart</h3>
                                     <?php include 'minicart.php'; ?>
                                     <div class="actions">
-                                        <a class="button button-viewcart" href="shoppingcart.html">
+                                        <a class="button button-viewcart" href="/shoppingcart.html">
                                             <span>View Bag</span>
                                         </a>
-                                        <a href="checkout.html" class="button button-checkout">
+                                        <a href="/checkout.html" class="button button-checkout">
                                             <span>Checkout</span>
                                         </a>
                                     </div>
@@ -119,7 +119,7 @@
                                             <a data-toggle="tab" aria-expanded="true" href="#header-tab-login">Login</a>
                                         </li>
                                         <li>
-                                            <a href="login.php">Register</a>
+                                            <a href="/login.html">Register</a>
                                         </li>
                                     </ul>
                                     <div class="tab-container">
@@ -141,7 +141,7 @@
                                                     <input type="submit" class="button" value="Login">
                                                 </p>
                                                 <p class="lost_password">
-                                                    <a href="forgot_password.php">Lost your password?</a>
+                                                    <a href="/forgotpassword.html">Lost your password?</a>
                                                 </p>
                                             </form>
                                         </div>
@@ -225,16 +225,16 @@
                                                 <h2 class="widgettitle">Shop Pages</h2>
                                                 <ul class="menu">
                                                     <li class="menu-item">
-                                                        <a href="shoppingcart.html">Shopping Cart</a>
+                                                        <a href="/shoppingcart.html">Shopping Cart</a>
                                                     </li>
                                                     <li class="menu-item">
-                                                        <a href="checkout.html">Checkout</a>
+                                                        <a href="/checkout.html">Checkout</a>
                                                     </li>
                                                     <li class="menu-item">
-                                                        <a href="contact.html">Contact us</a>
+                                                        <a href="/contact.html">Contact us</a>
                                                     </li>
                                                     <li class="menu-item">
-                                                        <a href="404page.html">404</a>
+                                                        <a href="/404page.html">404</a>
                                                     </li>
                                                     <li class="menu-item">
                                                         <a href="/login.html">Login/Register</a>

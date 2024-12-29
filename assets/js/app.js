@@ -34,7 +34,7 @@ $(document).ready(function() {
 
         $.ajax({
             type: 'POST',
-            url: 'cart.php',
+            url: '/cart.php',
             data: {
                 add_to_cart: true,
                 product_id: product_id,
@@ -66,7 +66,7 @@ $(document).ready(function() {
     // Update mini-cart count
     function updateCartCount() {
         $.ajax({
-            url: 'minicart.php',
+            url: '/minicart.php',
             success: function(response) {
                 let count = $(response).find('.minicart-items li').length;
                 $('.cart-count').text(count);
@@ -80,7 +80,7 @@ $(document).ready(function() {
         var form = $(this);
         $.ajax({
             type: 'POST',
-            url: 'cart.php',
+            url: '/cart.php',
             data: form.serialize(),
             success: function(response) {
                 $('.cart-content').html(response);

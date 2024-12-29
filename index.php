@@ -1,17 +1,10 @@
 <?php
-// Start the session
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Product.php';
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// Initialize Category and Product objects
-$product = new Product($db);
-
 include './includes/helper.php';
+$db = getDatabaseConnection();
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$product = getProductInstance($db);
 
 // Fetch featured products (for example, products with stock > 0)
 $stmt = $product->readAll();

@@ -1,17 +1,10 @@
 <?php
-// Start the session
 session_start();
-// Include database and class files
-include_once 'classes/Database.php';
-include_once 'classes/Product.php';
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-
-// Initialize Category and Product objects
 include './includes/helper.php';
-$product = new Product($db);
+$db = getDatabaseConnection();
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$product = getProductInstance($db);
 
 // Get category ID from query string
 $category_id = isset($_GET['id']) ? intval($_GET['id']) : 0;

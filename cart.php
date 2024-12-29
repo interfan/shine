@@ -1,12 +1,10 @@
 <?php
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Product.php';
-
-// Initialize database connection
-$database = new Database();
-$db = $database->getConnection();
-$product = new Product($db);
+include './includes/helper.php';
+$db = getDatabaseConnection();
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$product = getProductInstance($db);
 
 // Initialize the cart if it doesn't exist
 if (!isset($_SESSION['cart'])) {

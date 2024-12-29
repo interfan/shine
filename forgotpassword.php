@@ -1,13 +1,11 @@
 <?php
 session_start();
-include_once 'classes/Database.php';
-include_once 'classes/Account.php';
-
-$database = new Database();
-$db = $database->getConnection();
-$account = new Account($db);
-
+require 'vendor/autoload.php';
 include './includes/helper.php';
+$db = getDatabaseConnection();
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$account = getAccountInstance($db);
 
 $message = "";
 
