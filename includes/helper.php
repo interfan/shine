@@ -4,6 +4,7 @@ include_once 'classes/Category.php';
 include_once 'classes/Product.php';
 include_once 'classes/Page.php';
 include_once 'classes/Account.php';
+include_once 'classes/Forms.php';
 
 // Get Database Connection (Singleton)
 function getDatabaseConnection() {
@@ -51,5 +52,8 @@ function getAccountInstance($db = null) {
 function getCategoryInstance($db = null) {
     $db = $db ?? getDatabaseConnection();
     return new Category($db);
+}// Form instance for dynamic login/register forms
+function getFormInstance($action = '', $method = 'POST') {
+    return new Forms($action, $method);
 }
 ?>

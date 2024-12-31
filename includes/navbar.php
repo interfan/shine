@@ -1,3 +1,24 @@
+<?php
+// Create Form Instance
+$loginForm = new Forms('login.php', 'POST');
+$loginForm->addField('email', 'email', 'Email', true);
+$loginForm->addField('password', 'password', 'Password', true);
+$loginForm->addField('remember_me', 'checkbox', 'Remember me');
+$loginForm->addSubmitButton('login', 'Login', 'button');
+
+// Form Submission Logic (Optional Validation)
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (isset($_POST['login'])) {
+        if ($loginForm->validate($_POST)) {
+            echo "<p>Login Successful!</p>";
+        } else {
+            foreach ($loginForm->getErrors() as $error) {
+                echo "<p class='error'>{$error}</p>";
+            }
+        }
+    }
+}
+?>
 <header class="header style7">
     <div class="top-bar">
         <div class="container">
@@ -146,17 +167,6 @@
                                             </form>
                                         </div>
                                         <div id="header-tab-rigister" class="tab-panel">
-                                            <form method="post" class="register form-register">
-                                                <p class="form-row form-row-wide">
-                                                    <input type="email" placeholder="Email" class="input-text">
-                                                </p>
-                                                <p class="form-row form-row-wide">
-                                                    <input type="password" class="input-text" placeholder="Password">
-                                                </p>
-                                                <p class="form-row">
-                                                    <input type="submit" class="button" value="Register">
-                                                </p>
-                                            </form>
                                         </div>
                                     </div>
                                 </div>
