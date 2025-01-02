@@ -53,7 +53,7 @@ function getCategoryInstance($db = null) {
     $db = $db ?? getDatabaseConnection();
     return new Category($db);
 }// Form instance for dynamic login/register forms
-function getFormInstance($action = '', $method = 'POST') {
-    return new Forms($action, $method);
+function getFormInstance($action = '', $method = 'POST', $isPlaceholder = false) {
+    return new Forms($action, $method, $isPlaceholder);
 }
 ?>

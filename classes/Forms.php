@@ -7,19 +7,22 @@ class Forms {
     private $values = [];
     private $csrf_token;
     private $submitButton = [];
+    private $usePlaceholders = false;
 
-    public function __construct($action = '', $method = 'POST') {
+    public function __construct($action = '', $method = 'POST', $usePlaceholders = false) {
         $this->action = $action;
         $this->method = strtoupper($method);
+        $this->usePlaceholders = $usePlaceholders;
         $this->csrf_token = bin2hex(random_bytes(32));
         $_SESSION['csrf_token'] = $this->csrf_token;
     }
 
     // Add form fields dynamically
-    public function addField($name, $type, $label = '', $required = false, $options = [], $value = '') {
+    public function addField($name, $type, $labelOrPlaceholder = '', $required = false, $options = [], $value = '') {
         $this->fields[$name] = [
             'type' => $type,
-            'label' => $label,
+            'label' => $this->usePlaceholders ? '' : $labelOrPlaceholder,
+            'placeholder' => $this->usePlaceholders ? $labelOrPlaceholder : '',
             'required' => $required,
             'options' => $options,
             'value' => $value
@@ -35,27 +38,31 @@ class Forms {
         ];
     }
 
-    // Generate form HTML with form-row class
-    public function renderForm() {
-        echo "<form action='{$this->action}' method='{$this->method}' class='login'>";
+    // Generate form HTML
+    public function renderForm($formClass = 'form-standard') {
+        echo "<form action='{$this->action}' method='{$this->method}' class='{$formClass}'>";
         
         foreach ($this->fields as $name => $field) {
             $value = htmlspecialchars($field['value'] ?? '');
             $required = $field['required'] ? 'required' : '';
             $checked = !empty($value) && $field['type'] === 'checkbox' ? 'checked' : '';
             
-            echo "<p class='form-row'>";
-            if ($field['label']) {
+            echo "<p class='form-row ". ($field['type'] !== 'checkbox' ? 'form-row-wide' : '') ."'>";
+            
+            // Render label if placeholders aren't used
+            if (!$this->usePlaceholders && $field['label']) {
                 echo "<label for='{$name}'>{$field['label']}</label>";
             }
-
+            
+            // Render input fields
             switch ($field['type']) {
                 case 'text':
                 case 'email':
                 case 'number':
                 case 'password':
                 case 'date':
-                    echo "<input type='{$field['type']}' name='{$name}' value='{$value}' {$required}>";
+                    $placeholder = $field['placeholder'] ? "placeholder='{$field['placeholder']}'" : '';
+                    echo "<input type='{$field['type']}' name='{$name}' value='{$value}' {$placeholder} {$required}>";
                     break;
 
                 case 'textarea':
@@ -73,7 +80,7 @@ class Forms {
 
                 case 'checkbox':
                     echo "<input type='checkbox' name='{$name}' id='cb_{$name}' {$checked}>";
-                    echo "<label for='cb_{$name}' class='label-text'>{$field['label']}</label>";
+                    echo "<label for='cb_{$name}'>{$field['label']}</label>";
                     break;
             }
 
@@ -90,8 +97,7 @@ class Forms {
         // Render Submit Button
         if (!empty($this->submitButton)) {
             echo "<p class='form-row'>";
-            echo "<button type='submit' name='{$this->submitButton['name']}' class='{$this->submitButton['class']}'>";
-            echo "{$this->submitButton['label']}</button>";
+            echo "<input type='submit' name='{$this->submitButton['name']}' class='{$this->submitButton['class']}' value='{$this->submitButton['label']}'>";
             echo "</p>";
         }
 
@@ -105,15 +111,12 @@ class Forms {
             $this->values[$name] = $this->sanitize($value);
 
             if ($field['required'] && empty($value)) {
-                $this->errors[$name] = "{$field['label']} is required.";
+                $label = $field['placeholder'] ?: $field['label'];
+                $this->errors[$name] = "{$label} is required.";
             }
 
             if ($field['type'] === 'email' && !filter_var($value, FILTER_VALIDATE_EMAIL)) {
                 $this->errors[$name] = "Invalid email format.";
-            }
-
-            if ($field['type'] === 'number' && !is_numeric($value)) {
-                $this->errors[$name] = "{$field['label']} must be a number.";
             }
         }
 

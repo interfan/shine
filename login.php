@@ -102,7 +102,7 @@ include './includes/header.php';
                                     <?php if (!empty($login_error)) : ?>
                                         <div class="alert alert-danger"><?php echo $login_error; ?></div>
                                     <?php endif; ?>
-                                    <?php $loginForm->renderForm(); ?>
+                                    <?php $loginForm->renderForm('login'); ?>
                                 </div>
                             </div>
 
@@ -110,7 +110,7 @@ include './includes/header.php';
                             <div class="col-lg-6 col-md-6 col-sm-12">
                                 <div class="login-item">
                                     <h5 class="title-login">Register Now</h5>
-                                    <?php $registerForm->renderForm(); ?>
+                                    <?php $registerForm->renderForm('login'); ?>
                                 </div>
                             </div>
                         </div>

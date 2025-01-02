@@ -1,6 +1,6 @@
 <?php
 // Create Form Instance
-$loginForm = new Forms('login.php', 'POST');
+$loginForm = new Forms('login.php', 'POST', true);
 $loginForm->addField('email', 'email', 'Email', true);
 $loginForm->addField('password', 'password', 'Password', true);
 $loginForm->addField('remember_me', 'checkbox', 'Remember me');
@@ -145,7 +145,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </ul>
                                     <div class="tab-container">
                                         <div id="header-tab-login" class="tab-panel active">
-                                            <form method="post" class="login form-login">
+                                        <?php $loginForm->renderForm('login form-login'); ?>
+                                            <!-- <form method="post" class="login form-login">
                                                 <p class="form-row form-row-wide">
                                                     <input type="email" placeholder="Email" class="input-text">
                                                 </p>
@@ -164,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                                 <p class="lost_password">
                                                     <a href="/forgotpassword.html">Lost your password?</a>
                                                 </p>
-                                            </form>
+                                            </form> -->
                                         </div>
                                         <div id="header-tab-rigister" class="tab-panel">
                                         </div>
