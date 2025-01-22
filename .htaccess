@@ -17,3 +17,35 @@ RewriteRule ^category/([a-zA-Z0-9-]+)\.html$ categoryPage.php?slug=$1 [QSA,L]
 # 5. Redirect PHP URLs to .html equivalents
 RewriteCond %{THE_REQUEST} ^[A-Z]{3,}\s([^.]+)\.php [NC]
 RewriteRule ^ %1.html [R=301,L]
+
+# Enable mod_expires
+<IfModule mod_expires.c>
+    ExpiresActive On
+
+    # Default caching for CSS and JavaScript
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+    ExpiresByType application/x-javascript "access plus 1 month"
+
+    # Optional: Cache other assets (images, fonts, etc.)
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+</IfModule>
+
+# Enable gzip compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+</IfModule>
+
+# Set cache-control headers for modern browsers
+<IfModule mod_headers.c>
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=2592000"  # 30 days
+    </FilesMatch>
+</IfModule>
