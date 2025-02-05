@@ -5,6 +5,9 @@ include './includes/helper.php';
 
 $db = getDatabaseConnection();
 $account = getAccountInstance($db);
+$category = getCategoryInstance($db);
+$categories_array = getAllCategories($db);
+$product = getProductInstance($db);
 
 include './includes/googleLogin.php';
 include './includes/facebookLogin.php';
