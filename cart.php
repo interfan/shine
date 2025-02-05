@@ -11,6 +11,7 @@ if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [];
 }
 
+
 // Add to cart (Handle AJAX request)
 if (isset($_POST['add_to_cart'])) {
     $product_id = $_POST['product_id'];
