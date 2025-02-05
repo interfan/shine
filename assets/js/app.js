@@ -30,7 +30,7 @@ $(document).ready(function() {
     $('.add-to-cart-btn').on('click', function(e) {
         e.preventDefault();
         let product_id = $(this).data('id');
-        let quantity = $('#product-qty').val() || 1;
+        let quantity = $('.input-qty').val() || 1;
 
         $.ajax({
             type: 'POST',
@@ -42,7 +42,7 @@ $(document).ready(function() {
             },
             success: function(response) {
                 $('.cart-content').html(response);  // Update mini-cart dynamically
-                alert('Product added to cart!');
+                alert(response);
             },
             error: function() {
                 alert('Failed to add product to cart.');

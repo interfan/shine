@@ -96,7 +96,7 @@ class Product {
 
     // Read one product
     public function readOne() {
-         $query = "SELECT p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, p.video, p.color, p.size, p.alloy, p.gems, p.is_master, p.master_product_id, p.is_disabled, p.variation_name, p.variation_value, i.image
+         $query = "SELECT p.id,p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, p.video, p.color, p.size, p.alloy, p.gems, p.is_master, p.master_product_id, p.is_disabled, p.variation_name, p.variation_value, i.image
                 FROM " . $this->table_name . " p
                 LEFT JOIN product_images i ON p.id = i.product_id AND i.is_default = 1
                 WHERE p.slug = :slug
@@ -110,6 +110,7 @@ class Product {
             
             if ($row) {
                 // Set product properties
+                $this->id = $row['id'];
                 $this->name = $row['name'];
                 $this->slug = $row['slug'];
                 $this->sku = $row['sku'];
