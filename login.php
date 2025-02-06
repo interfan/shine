@@ -15,6 +15,8 @@ include './includes/facebookLogin.php';
 // Handle Login/Register
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['login'])) {
+        $account->email = $_POST['email'];
+        $account->password = $_POST['password'];
         if ($account->login()) {
             $_SESSION['user_id'] = $account->id;
             $_SESSION['user_name'] = $account->name;

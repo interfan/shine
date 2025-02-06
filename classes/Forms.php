@@ -13,8 +13,12 @@ class Forms {
         $this->action = $action;
         $this->method = strtoupper($method);
         $this->usePlaceholders = $usePlaceholders;
-        $this->csrf_token = bin2hex(random_bytes(32));
-        $_SESSION['csrf_token'] = $this->csrf_token;
+        // Preserve CSRF token if it already exists in the session
+        if (!isset($_SESSION['csrf_token'])) {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        $this->csrf_token = $_SESSION['csrf_token'];
     }
 
     // Add form fields dynamically

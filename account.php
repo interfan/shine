@@ -21,7 +21,7 @@ $category = getCategoryInstance($db);
 $categories_array = getAllCategories($db);
 $account = getAccountInstance($db);
 
-include './includes/helper.php';
+// include './includes/helper.php';
 
 // Fetch Account Info
 $account->id = $_SESSION['user_id'];

@@ -41,8 +41,7 @@ $(document).ready(function() {
                 quantity: quantity
             },
             success: function(response) {
-                $('.cart-content').html(response);  // Update mini-cart dynamically
-                alert(response);
+                $('.minicart-content').html(response); // Update mini-cart dynamically
             },
             error: function() {
                 alert('Failed to add product to cart.');
@@ -51,17 +50,17 @@ $(document).ready(function() {
     });
 
     // Quantity increment/decrement on PDP
-    $('.btn-number').on('click', function(e) {
-        e.preventDefault();
-        let qtyInput = $(this).siblings('input');
-        let currentQty = parseInt(qtyInput.val()) || 1;
+    // $('.btn-number').on('click', function(e) {
+    //     e.preventDefault();
+    //     let qtyInput = $(this).siblings('input');
+    //     let currentQty = parseInt(qtyInput.val()) || 1;
 
-        if ($(this).hasClass('qtyplus')) {
-            qtyInput.val(currentQty + 1);
-        } else if ($(this).hasClass('qtyminus') && currentQty > 1) {
-            qtyInput.val(currentQty - 1);
-        }
-    });
+    //     if ($(this).hasClass('qtyplus')) {
+    //         qtyInput.val(currentQty + 1);
+    //     } else if ($(this).hasClass('qtyminus') && currentQty > 1) {
+    //         qtyInput.val(currentQty - 1);
+    //     }
+    // });
 
     // Update mini-cart count
     function updateCartCount() {

@@ -29,8 +29,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($payment_method)) {
         $errors[] = 'Payment method is required.';
     }
-    if (empty($name) || empty($email)) {
-        $errors[] = 'Name and email are required.';
+    if (empty($name)) {
+        $errors[] = 'Name is required.';
+    }
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $errors[] = 'Valid email is required.';
+    }
+
+    // Check if cart is empty
+    if (empty($_SESSION['cart']['items'])) {
+        $errors[] = 'Your cart is empty.';
     }
 
     if (empty($errors)) {
@@ -44,28 +52,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Calculate total amount
         $order_items = [];
         $total_amount = 0;
-        if (isset($_SESSION['cart']) && !empty($_SESSION['cart'])) {
-            foreach ($_SESSION['cart'] as $product_id => $quantity) {
-                $product->id = $product_id;
-                $stmt = $product->readOne();
-                $item = $stmt->fetch(PDO::FETCH_ASSOC);
-                if ($item) {
-                    $item['quantity'] = $quantity;
-                    $total_amount += $item['price'] * $quantity;
-                    $order_items[] = $item;
-                }
+
+        foreach ($_SESSION['cart']['items'] as $cart_item) {
+            $product->id = $cart_item['id'];
+            $stmt = $product->readOne();
+            $item = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($item) {
+                $item['quantity'] = $cart_item['quantity'];
+                $total_amount += $item['price'] * $cart_item['quantity'];
+                $order_items[] = $item;
             }
         }
 
         $order->total_amount = $total_amount;
-        $order->create(); // Save order to database
 
-        // Clear the cart
-        unset($_SESSION['cart']);
+        // Create order and insert items
+        $order_id = $order->create();
+        if ($order_id) {
+            foreach ($order_items as $item) {
+                $order->addOrderItem($order_id, $item['id'], $item['quantity'], $item['price']);
+            }
 
-        // Redirect to order confirmation page
-        header('Location: order_confirmation.php');
-        exit;
+            // Clear the cart
+            unset($_SESSION['cart']);
+
+            // Redirect to order confirmation page
+            header('Location: order_confirmation.php?order_id=' . $order_id);
+            exit;
+        } else {
+            $errors[] = 'Order processing failed. Please try again.';
+        }
     }
 }
 
@@ -91,13 +108,13 @@ include 'header.php'; // Include header
             <fieldset>
                 <legend>Shipping Information</legend>
                 <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" value="<?= htmlspecialchars($name ?? '') ?>" required>
                 
                 <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
+                <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
                 
                 <label for="shipping_address">Shipping Address:</label>
-                <textarea id="shipping_address" name="shipping_address" rows="4" required></textarea>
+                <textarea id="shipping_address" name="shipping_address" rows="4" required><?= htmlspecialchars($shipping_address ?? '') ?></textarea>
             </fieldset>
 
             <fieldset>
@@ -105,8 +122,8 @@ include 'header.php'; // Include header
                 <label for="payment_method">Payment Method:</label>
                 <select id="payment_method" name="payment_method" required>
                     <option value="">Select a payment method</option>
-                    <option value="credit_card">Credit Card</option>
-                    <option value="paypal">PayPal</option>
+                    <option value="credit_card" <?= isset($payment_method) && $payment_method === 'credit_card' ? 'selected' : '' ?>>Credit Card</option>
+                    <option value="paypal" <?= isset($payment_method) && $payment_method === 'paypal' ? 'selected' : '' ?>>PayPal</option>
                 </select>
             </fieldset>
 
