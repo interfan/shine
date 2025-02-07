@@ -12,6 +12,13 @@ $product = new Product($db);
 $productImages = new ProductImages($db);
 $category = new Category($db);
 
+// Load allowed options from the config for multi-select fields
+$allowedOptions = Product::getAllowedOptions();
+$allowedAlloys = isset($allowedOptions['alloys']) ? $allowedOptions['alloys'] : [];
+$allowedGems   = isset($allowedOptions['gems']) ? $allowedOptions['gems'] : [];
+$allowedColors = isset($allowedOptions['colors']) ? $allowedOptions['colors'] : [];
+$allowedSizes  = isset($allowedOptions['sizes']) ? $allowedOptions['sizes'] : ["XS", "S", "M", "L", "XL", "XXL"];
+
 $categories = $category->readAll();
 
 $successMessage = '';
@@ -26,10 +33,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->category_id = $_POST['category_id'];
     $product->stock = $_POST['stock'];
     $product->video = $_POST['video'];
-    $product->color = $_POST['color'];
-    $product->size = $_POST['size'];
-    $product->alloy = $_POST['alloy'];
-    $product->gems = $_POST['gems'];
+    
+    // For multi-select fields, the posted values will be arrays.
+    // You can assign them directly. (They will be JSON-encoded in the Product::create() method.)
+    $product->color = isset($_POST['color']) ? $_POST['color'] : [];  
+    $product->size = isset($_POST['size']) ? $_POST['size'] : [];
+    $product->alloy = isset($_POST['alloy']) ? $_POST['alloy'] : [];
+    $product->gems = isset($_POST['gems']) ? $_POST['gems'] : [];
+    
     $product->is_master = isset($_POST['is_master']) ? 1 : 0; // Check if product is master
 
     if ($product->create()) {
@@ -45,9 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $tempImagePath = $_FILES['images']['tmp_name'][$key];
                     $imagePath = $productDir . '/' . basename($imageName);
 
-                    // Check if the file already exists
+                    // Check if the file already exists; if so, append timestamp.
                     if (file_exists($imagePath)) {
-                        // Optionally handle duplicate names (e.g., append a timestamp)
                         $pathInfo = pathinfo($imagePath);
                         $newImageName = $pathInfo['filename'] . '_' . time() . '.' . $pathInfo['extension'];
                         $imagePath = $productDir . '/' . $newImageName;
@@ -55,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     if (move_uploaded_file($tempImagePath, $imagePath)) {
                         $productImages->product_id = $product->id;
-                        $productImages->image = basename($imagePath); // Save the new image name
+                        $productImages->image = basename($imagePath);
                         $productImages->is_default = 0; // Do not set any image as default automatically
                         if (!$productImages->addImage()) {
                             $errorMessage = "Unable to add image.";
@@ -114,17 +124,45 @@ include '../includes/internal/header.php';
     <label for="video">Video URL:</label>
     <input type="text" name="video" id="video">
 
+    <!-- Multi-select for Color -->
     <label for="color">Color:</label>
-    <input type="text" name="color" id="color">
+    <select name="color[]" id="color" multiple required>
+        <?php foreach ($allowedColors as $colorOption): ?>
+            <option value="<?php echo htmlspecialchars($colorOption); ?>">
+                <?php echo htmlspecialchars($colorOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Size -->
     <label for="size">Size:</label>
-    <input type="text" name="size" id="size">
+    <select name="size[]" id="size" multiple required>
+        <?php foreach ($allowedSizes as $sizeOption): ?>
+            <option value="<?php echo htmlspecialchars($sizeOption); ?>">
+                <?php echo htmlspecialchars($sizeOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Alloy -->
     <label for="alloy">Alloy:</label>
-    <input type="text" name="alloy" id="alloy">
+    <select name="alloy[]" id="alloy" multiple required>
+        <?php foreach ($allowedAlloys as $alloyOption): ?>
+            <option value="<?php echo htmlspecialchars($alloyOption); ?>">
+                <?php echo htmlspecialchars($alloyOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Gems -->
     <label for="gems">Gems:</label>
-    <input type="text" name="gems" id="gems">
+    <select name="gems[]" id="gems" multiple required>
+        <?php foreach ($allowedGems as $gemsOption): ?>
+            <option value="<?php echo htmlspecialchars($gemsOption); ?>">
+                <?php echo htmlspecialchars($gemsOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
     <label for="is_master">Is Master Product:</label>
     <input type="checkbox" name="is_master" id="is_master">
@@ -134,5 +172,9 @@ include '../includes/internal/header.php';
 
     <button type="submit">Add Product</button>
 </form>
-
+<script>
+document.querySelector("form").addEventListener("submit", function() {
+    tinymce.triggerSave(); // Ensures TinyMCE content is synced to the hidden <textarea>
+});
+</script>
 <?php include '../includes/internal/footer.php'; ?>

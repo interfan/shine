@@ -104,7 +104,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </form>
                     </div>
-                </div><?php print_r($_SESSION['cart']); ?>
+                </div>
                 <div class="col-lg-2 col-sm-12 col-md-3 col-xs-12 col-ts-12">
                     <div class="header-control">
                         <div class="block-minicart ysera-mini-cart block-header ysera-dropdown">

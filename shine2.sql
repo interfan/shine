@@ -1,31 +1,8 @@
--- phpMyAdmin SQL Dump
--- version 5.2.1
--- https://www.phpmyadmin.net/
---
--- Host: 127.0.0.1:3306
--- Generation Time: Feb 07, 2025 at 03:19 PM
--- Server version: 8.3.0
--- PHP Version: 8.2.18
-
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Database: `shine`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `accounts`
---
+CREATE DATABASE IF NOT EXISTS `shine` DEFAULT CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci;
+USE `shine`;
 
 DROP TABLE IF EXISTS `accounts`;
 CREATE TABLE IF NOT EXISTS `accounts` (
@@ -43,18 +20,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `accounts`
---
-
+TRUNCATE TABLE `accounts`;
 INSERT INTO `accounts` (`id`, `name`, `last_name`, `email`, `password`, `phone`, `birthdate`, `newsletter_subscription`, `created_at`, `updated_at`) VALUES
-(2, 'Ивайло', 'Трепетанов', 'interfan6@gmail.com', '$2y$10$A99UXpILT9qWNjt65MaqdeHmNQO8ObA2M34HhxlUuwkfyD8C/8.pC', '0888103931', '2024-12-03', 0, '2024-12-26 13:47:04', '2025-02-06 22:20:07');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `addresses`
---
+(2, 'Ивайло', 'Трепетанов', 'ivaylo.i.trepetanov@gmail.com', '$2y$10$Z10zLaAlEj.WqNbo2Zp8G.FvCOWY2qAARh6QLttdGWLwK1X8Lw33y', '0888103931', '2024-12-03', 0, '2024-12-26 13:47:04', '2024-12-26 14:14:37');
 
 DROP TABLE IF EXISTS `addresses`;
 CREATE TABLE IF NOT EXISTS `addresses` (
@@ -71,12 +39,7 @@ CREATE TABLE IF NOT EXISTS `addresses` (
   KEY `account_id` (`account_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `admin`
---
-
+TRUNCATE TABLE `addresses`;
 DROP TABLE IF EXISTS `admin`;
 CREATE TABLE IF NOT EXISTS `admin` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -89,18 +52,9 @@ CREATE TABLE IF NOT EXISTS `admin` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `admin`
---
-
+TRUNCATE TABLE `admin`;
 INSERT INTO `admin` (`id`, `username`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
 (1, 'shine', 'ivaylo.i.trepetanov@gmail.com', '$2y$10$k0MjFboZe4cIGLMh95CvieQemVY3JOHOlghunCPejEuJx8Beht7YW', 'admin', '2024-09-08 18:48:09', '2024-09-13 19:27:52');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `banner_slots`
---
 
 DROP TABLE IF EXISTS `banner_slots`;
 CREATE TABLE IF NOT EXISTS `banner_slots` (
@@ -123,18 +77,9 @@ CREATE TABLE IF NOT EXISTS `banner_slots` (
   KEY `category_id` (`category_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `banner_slots`
---
-
+TRUNCATE TABLE `banner_slots`;
 INSERT INTO `banner_slots` (`id`, `title`, `description`, `short_description`, `price`, `shop_now_button`, `banner_position`, `image`, `view_more`, `is_enabled`, `product_id`, `category_id`, `created_at`, `updated_at`) VALUES
 (1, 'tests', '', '', 0.00, '', '', 'tests/17034902441003be46296841cb894ed16576190034~tplv-aphluv4xwc-origin-jpeg-800x800.jpg', '', 0, 0, 0, '2024-09-15 20:30:45', '2024-09-15 20:47:56');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `categories`
---
 
 DROP TABLE IF EXISTS `categories`;
 CREATE TABLE IF NOT EXISTS `categories` (
@@ -150,10 +95,7 @@ CREATE TABLE IF NOT EXISTS `categories` (
   KEY `parent_id` (`parent_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `categories`
---
-
+TRUNCATE TABLE `categories`;
 INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `parent_id`, `created_at`, `updated_at`, `is_disabled`) VALUES
 (1, 'Earrings', 'earrings', 'Earrings', 0, '2024-09-08 19:20:44', '2024-09-08 19:20:44', 0),
 (2, 'Necklace', 'necklace', 'necklace', 0, '2024-09-08 19:23:16', '2024-09-08 19:23:16', 0),
@@ -164,12 +106,6 @@ INSERT INTO `categories` (`id`, `name`, `slug`, `description`, `parent_id`, `cre
 (9, 'Hairpin', 'hairpin', 'Hairpin', 0, '2024-09-08 19:59:30', '2024-09-08 19:59:30', 0),
 (10, 'Belt', 'belt', 'Belt', 0, '2024-09-08 19:59:44', '2024-09-08 19:59:44', 0),
 (11, 'Wrap', 'wrap', 'Wrap', 0, '2024-09-08 19:59:55', '2024-09-08 19:59:55', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
 
 DROP TABLE IF EXISTS `orders`;
 CREATE TABLE IF NOT EXISTS `orders` (
@@ -183,12 +119,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `order_items`
---
-
+TRUNCATE TABLE `orders`;
 DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -203,12 +134,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `pages`
---
-
+TRUNCATE TABLE `order_items`;
 DROP TABLE IF EXISTS `pages`;
 CREATE TABLE IF NOT EXISTS `pages` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -222,19 +148,10 @@ CREATE TABLE IF NOT EXISTS `pages` (
   UNIQUE KEY `slug` (`slug`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `pages`
---
-
+TRUNCATE TABLE `pages`;
 INSERT INTO `pages` (`id`, `title`, `slug`, `content`, `created_at`, `updated_at`, `is_disabled`) VALUES
 (1, 'About Us', 'about-us', 'This is the About Us page content.', '2024-09-08 19:11:04', '2024-09-14 09:45:44', 0),
 (4, 'Contact Us ', 'contact-us', '&amp;lt;div class=&quot;page-main-content&quot;&amp;gt; &amp;lt;div class=&quot;google-map&quot;&amp;gt; &amp;lt;div class=&quot;ysera-google-maps&quot; id=&quot;ysera-google-maps&quot; data-hue=&quot;&quot; data-lightness=&quot;1&quot; data-map-style=&quot;2&quot; data-saturation=&quot;-99&quot; data-longitude=&quot;-73.985130&quot; data-latitude=&quot;40.758896&quot; data-pin-icon=&quot;&quot; data-zoom=&quot;14&quot; data-map-type=&quot;ROADMAP&quot; style=&quot;position: relative; overflow: hidden;&quot;&amp;gt;&amp;lt;div style=&quot;height: 100%; width: 100%; position: absolute; top: 0px; left: 0px; background-color: rgb(229, 227, 223);&quot;&amp;gt;&amp;lt;div class=&quot;gm-err-container&quot;&amp;gt;&amp;lt;div class=&quot;gm-err-content&quot;&amp;gt;&amp;lt;div class=&quot;gm-err-icon&quot;&amp;gt;&amp;lt;img src=&quot;https://maps.gstatic.com/mapfiles/api-3/images/icon_error.png&quot; alt=&quot;&quot; draggable=&quot;false&quot; style=&quot;user-select: none;&quot;&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;div class=&quot;gm-err-title&quot;&amp;gt;Oops! Something went wrong.&amp;lt;/div&amp;gt;&amp;lt;div class=&quot;gm-err-message&quot;&amp;gt;This page didn&#039;t load Google Maps correctly. See the JavaScript console for technical details.&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt;&amp;lt;/div&amp;gt; &amp;lt;span class=&quot;fa fa-map-marker&quot;&amp;gt;&amp;lt;/span&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;container&quot;&amp;gt; &amp;lt;div class=&quot;row&quot;&amp;gt; &amp;lt;div class=&quot;col-sm-12&quot;&amp;gt; &amp;lt;div class=&quot;form-contact&quot;&amp;gt; &amp;lt;div class=&quot;col-lg-8 no-padding&quot;&amp;gt; &amp;lt;div class=&quot;form-message&quot;&amp;gt; &amp;lt;h2 class=&quot;title&quot;&amp;gt; Send us a Message! &amp;lt;/h2&amp;gt; &amp;lt;form action=&quot;#&quot; class=&quot;ysera-contact-fom&quot;&amp;gt; &amp;lt;div class=&quot;row&quot;&amp;gt; &amp;lt;div class=&quot;col-sm-6&quot;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;span class=&quot;form-label&quot;&amp;gt;Your Name *&amp;lt;/span&amp;gt; &amp;lt;span class=&quot;form-control-wrap your-name&quot;&amp;gt; &amp;lt;input title=&quot;your-name&quot; type=&quot;text&quot; name=&quot;your-name&quot; size=&quot;40&quot; class=&quot;form-control form-control-name&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;col-sm-6&quot;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;span class=&quot;form-label&quot;&amp;gt; Your Email * &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;form-control-wrap your-email&quot;&amp;gt; &amp;lt;input title=&quot;your-email&quot; type=&quot;email&quot; name=&quot;your-email&quot; size=&quot;40&quot; class=&quot;form-control form-control-email&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;row&quot;&amp;gt; &amp;lt;div class=&quot;col-sm-6&quot;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;span class=&quot;form-label&quot;&amp;gt;Phone&amp;lt;/span&amp;gt; &amp;lt;span class=&quot;form-control-wrap your-phone&quot;&amp;gt; &amp;lt;input title=&quot;your-phone&quot; type=&quot;text&quot; name=&quot;your-phone&quot; class=&quot;form-control form-control-phone&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;col-sm-6&quot;&amp;gt; &amp;lt;p&amp;gt; &amp;lt;span class=&quot;form-label&quot;&amp;gt; Company &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;form-control-wrap your-company&quot;&amp;gt; &amp;lt;input title=&quot;your-company&quot; type=&quot;text&quot; name=&quot;your-company&quot; class=&quot;form-control your-company&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;p&amp;gt; &amp;lt;span class=&quot;form-label&quot;&amp;gt; Your Message &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;wpcf7-form-control-wrap your-message&quot;&amp;gt; &amp;lt;textarea title=&quot;your-message&quot; name=&quot;your-message&quot; cols=&quot;40&quot; rows=&quot;9&quot; class=&quot;form-control your-textarea&quot;&amp;gt;&amp;lt;/textarea&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;p&amp;gt; &amp;lt;input type=&quot;submit&quot; value=&quot;SEND MESSAGE&quot; class=&quot;form-control-submit button-submit&quot;&amp;gt; &amp;lt;/p&amp;gt; &amp;lt;/form&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;col-lg-4 no-padding&quot;&amp;gt; &amp;lt;div class=&quot;form-contact-information&quot;&amp;gt; &amp;lt;form action=&quot;#&quot; class=&quot;ysera-contact-info&quot;&amp;gt; &amp;lt;h2 class=&quot;title&quot;&amp;gt; Contact information &amp;lt;/h2&amp;gt; &amp;lt;div class=&quot;info&quot;&amp;gt; &amp;lt;div class=&quot;item address&quot;&amp;gt; &amp;lt;span class=&quot;icon&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;text&quot;&amp;gt; Restfield White City London G12 Ariel Way - United Kingdom &amp;lt;/span&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;item phone&quot;&amp;gt; &amp;lt;span class=&quot;icon&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;text&quot;&amp;gt; (+800) 123 456 7890 &amp;lt;/span&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;item email&quot;&amp;gt; &amp;lt;span class=&quot;icon&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;span class=&quot;text&quot;&amp;gt; info@yseraoutfit.co.uk &amp;lt;/span&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;div class=&quot;socials&quot;&amp;gt; &amp;lt;a href=&quot;#&quot; class=&quot;social-item&quot; target=&quot;_blank&quot;&amp;gt; &amp;lt;span class=&quot;icon fa fa-facebook&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/a&amp;gt; &amp;lt;a href=&quot;#&quot; class=&quot;social-item&quot; target=&quot;_blank&quot;&amp;gt; &amp;lt;span class=&quot;icon fa fa-twitter-square&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/a&amp;gt; &amp;lt;a href=&quot;#&quot; class=&quot;social-item&quot; target=&quot;_blank&quot;&amp;gt; &amp;lt;span class=&quot;icon fa fa-instagram&quot;&amp;gt; &amp;lt;/span&amp;gt; &amp;lt;/a&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/form&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt; &amp;lt;/div&amp;gt;', '2024-12-23 00:33:20', '2024-12-25 22:19:07', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `password_resets`
---
 
 DROP TABLE IF EXISTS `password_resets`;
 CREATE TABLE IF NOT EXISTS `password_resets` (
@@ -246,55 +163,9 @@ CREATE TABLE IF NOT EXISTS `password_resets` (
   KEY `email` (`email`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `password_resets`
---
-
+TRUNCATE TABLE `password_resets`;
 INSERT INTO `password_resets` (`id`, `email`, `token`, `created_at`) VALUES
 (3, 'ivaylo.i.trepetanov@gmail.com', '522f51f5e2ebff0dd1caf413903a5ec3c916a6266d311b556f928012a0f283bdd24b5de5cd589e0053291d35dcb09972d101', '2024-12-26 14:31:16');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pricebooks`
---
-
-DROP TABLE IF EXISTS `pricebooks`;
-CREATE TABLE IF NOT EXISTS `pricebooks` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `description` text,
-  `is_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `is_standard` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pricebook_prices`
---
-
-DROP TABLE IF EXISTS `pricebook_prices`;
-CREATE TABLE IF NOT EXISTS `pricebook_prices` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `product_id` int NOT NULL,
-  `pricebook_id` int NOT NULL,
-  `price` decimal(10,2) DEFAULT NULL,
-  `is_default` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  KEY `product_id` (`product_id`),
-  KEY `pricebook_id` (`pricebook_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `products`
---
 
 DROP TABLE IF EXISTS `products`;
 CREATE TABLE IF NOT EXISTS `products` (
@@ -323,10 +194,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   KEY `category_id` (`category_id`)
 ) ;
 
---
--- Dumping data for table `products`
---
-
+TRUNCATE TABLE `products`;
 INSERT INTO `products` (`id`, `name`, `slug`, `description`, `price`, `category_id`, `stock`, `created_at`, `updated_at`, `video`, `color`, `size`, `alloy`, `gems`, `sku`, `is_master`, `master_product_id`, `is_disabled`, `variation_name`, `variation_value`) VALUES
 (52, '193 Versatile, compact, and shining star Earrings 925 Silver', '193-versatile-compact-and-shining-star-earrings-925-silver', 'Product description here', 29.99, 1, 1, '2024-09-16 14:57:16', '2024-12-26 10:24:17', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
 (54, '142 Elegant temperament leaf shaped zircon earrings', '142-elegant-temperament-leaf-shaped-zircon-earrings', 'Product description here', 15.99, 1, 1, '2024-09-16 14:57:16', '2024-09-16 14:57:16', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
@@ -1055,14 +923,7 @@ INSERT INTO `products` (`id`, `name`, `slug`, `description`, `price`, `category_
 (1610, '823 Alloy Cute Love bead shoulder bag', '823-alloy-cute-love-bead-shoulder-bag', 'Product description here', 78.99, 9, 1, '2024-09-16 14:57:22', '2024-09-16 14:57:22', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
 (1611, '538 klein blue Woolen one-piece coat', '538-klein-blue-woolen-one-piece-coat', 'Product description here', 110.00, 10, 1, '2024-09-16 14:57:22', '2024-09-16 14:57:22', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
 (1615, '545 Fashionable Jeans Outfit (Top+Pants)', '545-fashionable-jeans-outfit-toppants', 'Product description here', 69.99, 10, 1, '2024-09-16 14:57:22', '2024-12-26 10:24:17', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
-(1619, '567 Colorful oversize T-shirt', '567-colorful-oversize-t-shirt', 'Product description here', 25.99, 10, 1, '2024-09-16 14:57:22', '2024-09-16 14:57:22', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL),
-(1627, 'ring', 'ring', '<p>test e seascas&amp;lt;br&amp;gt; saasdsad</p>', 22.00, 10, 2, '2025-02-06 23:35:18', '2025-02-07 00:02:11', '', '[\"Silver\",\"Gold\",\"Rose Gold\"]', '[\"M\"]', '[\"Rose Gold\"]', '[\"Ruby\"]', '', 1, 0, 0, '', '');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_images`
---
+(1619, '567 Colorful oversize T-shirt', '567-colorful-oversize-t-shirt', 'Product description here', 25.99, 10, 1, '2024-09-16 14:57:22', '2024-09-16 14:57:22', NULL, NULL, NULL, NULL, NULL, 'SKU not found', 1, NULL, 0, NULL, NULL);
 
 DROP TABLE IF EXISTS `product_images`;
 CREATE TABLE IF NOT EXISTS `product_images` (
@@ -1073,21 +934,9 @@ CREATE TABLE IF NOT EXISTS `product_images` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `product_images_ibfk_1` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `product_images`
---
-
-INSERT INTO `product_images` (`id`, `product_id`, `image`, `is_default`, `created_at`) VALUES
-(40, 1627, '100cac13-c2a9-460c-9fa2-97764449863a.png', 1, '2025-02-06 23:48:13');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `product_variations`
---
-
+TRUNCATE TABLE `product_images`;
 DROP TABLE IF EXISTS `product_variations`;
 CREATE TABLE IF NOT EXISTS `product_variations` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -1098,12 +947,7 @@ CREATE TABLE IF NOT EXISTS `product_variations` (
   KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `settings`
---
-
+TRUNCATE TABLE `product_variations`;
 DROP TABLE IF EXISTS `settings`;
 CREATE TABLE IF NOT EXISTS `settings` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -1115,21 +959,12 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb3;
 
---
--- Dumping data for table `settings`
---
-
+TRUNCATE TABLE `settings`;
 INSERT INTO `settings` (`id`, `name`, `value`, `created_at`, `updated_at`) VALUES
 (1, 'site_name', '', '2024-09-08 18:58:24', '2024-09-15 20:49:34'),
 (2, 'currency', 'USD', '2024-09-08 18:58:24', '2024-09-08 18:58:24'),
 (3, 'language', 'en', '2024-09-08 18:58:24', '2024-09-08 18:58:24'),
 (4, 'tax_rate', '0.00', '2024-09-08 18:58:24', '2024-09-08 18:58:24');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `users`
---
 
 DROP TABLE IF EXISTS `users`;
 CREATE TABLE IF NOT EXISTS `users` (
@@ -1149,24 +984,8 @@ CREATE TABLE IF NOT EXISTS `users` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb3;
 
---
--- Constraints for dumped tables
---
+TRUNCATE TABLE `users`;
 
---
--- Constraints for table `pricebook_prices`
---
-ALTER TABLE `pricebook_prices`
-  ADD CONSTRAINT `fk_pricebook_prices_pricebook` FOREIGN KEY (`pricebook_id`) REFERENCES `pricebooks` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `fk_pricebook_prices_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `product_images`
---
 ALTER TABLE `product_images`
   ADD CONSTRAINT `product_images_ibfk_1` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`) ON DELETE CASCADE;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

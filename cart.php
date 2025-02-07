@@ -10,8 +10,20 @@ $product = getProductInstance($db);
 if (!isset($_SESSION['cart'])) {
     $_SESSION['cart'] = [
         'items' => [],
-        'totalQuantity' => 0
+        'totalQuantity' => 0,
+        'subtotal' => 0
     ];
+}
+
+// Function to recalculate cart totals
+function recalcCartTotals() {
+    // Calculate total quantity
+    $_SESSION['cart']['totalQuantity'] = array_sum(array_column($_SESSION['cart']['items'], 'quantity'));
+    
+    // Calculate subtotal using array_reduce
+    $_SESSION['cart']['subtotal'] = array_reduce($_SESSION['cart']['items'], function($carry, $item) {
+        return $carry + ($item['price'] * $item['quantity']);
+    }, 0);
 }
 
 // Add to cart (Handle AJAX request)
@@ -28,7 +40,6 @@ if (isset($_POST['add_to_cart'])) {
             'id' => $product->id,
             'name' => $product->name,
             'price' => $product->price,
-            'image' => $product->image ?? 'assets/images/default.jpg',
             'quantity' => $quantity
         ];
 
@@ -47,8 +58,8 @@ if (isset($_POST['add_to_cart'])) {
             $_SESSION['cart']['items'][] = $item;
         }
         
-        // Recalculate totalQuantity
-        $_SESSION['cart']['totalQuantity'] = array_sum(array_column($_SESSION['cart']['items'], 'quantity'));
+        // Recalculate totals
+        recalcCartTotals();
 
         // Return updated mini-cart
         include 'minicart.php';
@@ -65,8 +76,8 @@ if (isset($_POST['update_cart'])) {
         $_SESSION['cart']['items'][$key]['quantity'] = $qty;
     }
     
-    // Recalculate totalQuantity
-    $_SESSION['cart']['totalQuantity'] = array_sum(array_column($_SESSION['cart']['items'], 'quantity'));
+    // Recalculate totals
+    recalcCartTotals();
 
     include 'shoppingcart-content.php';
     exit();
@@ -83,10 +94,8 @@ if (isset($_POST['remove_item'])) {
     // Reindex the items array
     $_SESSION['cart']['items'] = array_values($_SESSION['cart']['items']);
     
-    // Recalculate totalQuantity
-    $_SESSION['cart']['totalQuantity'] = !empty($_SESSION['cart']['items'])
-        ? array_sum(array_column($_SESSION['cart']['items'], 'quantity'))
-        : 0;
+    // Recalculate totals
+    recalcCartTotals();
 
     include 'minicart.php';
     exit();

@@ -25,9 +25,9 @@ $category_slug = isset($_GET['slug']) ? $_GET['slug'] : '';
 $category->slug = $category_slug;
 $category->readOneBySlug();  // New method to fetch by slug
 // Fetch products in this category
-$stmt = $product->readAllByCategorySlug($category_slug, $limit, $offset, $sort_by);
+$results = $product->readAllByCategorySlug($category_slug, $limit, $offset, $sort_by);
 $products = array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($results as $row) {
     if ($row['stock'] > 0 && !$row['is_disabled']) { // Optional: filter out disabled or out-of-stock products
         $products[] = $row;
     }

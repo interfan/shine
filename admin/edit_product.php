@@ -21,11 +21,18 @@ if (!$product->readOne()) {
 
 $categories = $category->readAll();
 
+// Load allowed options from the config for multi-select fields
+$allowedOptions = Product::getAllowedOptions();
+$allowedColors = isset($allowedOptions['colors']) ? $allowedOptions['colors'] : [];
+$allowedSizes = isset($allowedOptions['sizes']) ? $allowedOptions['sizes'] : [];
+$allowedAlloys = isset($allowedOptions['alloys']) ? $allowedOptions['alloys'] : [];
+$allowedGems = isset($allowedOptions['gems']) ? $allowedOptions['gems'] : [];
+
 $successMessage = '';
 $errorMessage = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Set product properties
+    // Set product properties from POST
     $product->name = $_POST['name'];
     $product->slug = $_POST['slug'];
     $product->description = $_POST['description'];
@@ -33,19 +40,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $product->category_id = $_POST['category_id'];
     $product->stock = $_POST['stock'];
     $product->video = $_POST['video'];
-    $product->color = $_POST['color'];
-    $product->size = $_POST['size'];
-    $product->alloy = $_POST['alloy'];
-    $product->gems = $_POST['gems'];
+    
+    // For multi-select fields, assign the arrays (they will be JSON‑encoded in Product::update())
+    $product->color = isset($_POST['color']) ? $_POST['color'] : [];
+    $product->size = isset($_POST['size']) ? $_POST['size'] : [];
+    $product->alloy = isset($_POST['alloy']) ? $_POST['alloy'] : [];
+    $product->gems = isset($_POST['gems']) ? $_POST['gems'] : [];
+    
     $product->sku = $_POST['sku']; // Set SKU
-    // Set is_master from checkbox (1 if checked, 0 if not)
     $product->is_master = isset($_POST['is_master']) ? 1 : 0;
     
     // Set master product ID from the form (null if not provided)
     $product->master_product_id = $_POST['master_product_id'] ?? null;
-
-
-    $product->is_disabled = isset($_POST['is_disabled']) ? 1 : 0; // Handle new field
+    $product->is_disabled = isset($_POST['is_disabled']) ? 1 : 0;
 
     if ($product->update()) {
         // Handle image updates
@@ -54,18 +61,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if (!file_exists($productDir)) {
                 mkdir($productDir, 0777, true);
             }
-
             foreach ($_FILES['images']['name'] as $key => $imageName) {
                 if ($_FILES['images']['error'][$key] == UPLOAD_ERR_OK) {
                     $tempImagePath = $_FILES['images']['tmp_name'][$key];
                     $imagePath = $productDir . '/' . basename($imageName);
-
                     if (file_exists($imagePath)) {
                         $pathInfo = pathinfo($imagePath);
                         $newImageName = $pathInfo['filename'] . '_' . time() . '.' . $pathInfo['extension'];
                         $imagePath = $productDir . '/' . $newImageName;
                     }
-
                     if (move_uploaded_file($tempImagePath, $imagePath)) {
                         $productImages->product_id = $product->id;
                         $productImages->image = basename($imagePath);
@@ -92,6 +96,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         $successMessage = 'Product updated successfully.';
+        $product->slug = $_GET['slug'];
+
+        // Check if readOne() was successful
+        if (!$product->readOne()) {
+            die("Unable to retrieve product details.");
+        }
     } else {
         $errorMessage = 'Unable to update product.';
     }
@@ -146,7 +156,7 @@ include '../includes/internal/header.php';
     <p style="color: red;"><?php echo htmlspecialchars($errorMessage ?? ''); ?></p>
 <?php endif; ?>
 
-<form action="edit_product.php?id=<?php echo htmlspecialchars($product->id ?? ''); ?>" method="post" enctype="multipart/form-data">
+<form action="edit_product.php?slug=<?php echo htmlspecialchars($product->slug ?? ''); ?>" method="post" enctype="multipart/form-data">
     <label for="name">Product Name:</label>
     <input type="text" name="name" id="name" value="<?php echo htmlspecialchars($product->name ?? ''); ?>" required>
 
@@ -177,17 +187,54 @@ include '../includes/internal/header.php';
     <label for="video">Video URL:</label>
     <input type="text" name="video" id="video" value="<?php echo htmlspecialchars($product->video ?? ''); ?>">
 
+    <!-- Multi-select for Color -->
     <label for="color">Color:</label>
-    <input type="text" name="color" id="color" value="<?php echo htmlspecialchars($product->color ?? ''); ?>">
+    <select name="color[]" id="color" multiple>
+        <?php 
+        // If product->color was stored as JSON, it should be decoded into an array.
+        $selectedColors = is_array($product->color) ? $product->color : [];
+        foreach ($allowedColors as $colorOption): ?>
+            <option value="<?php echo htmlspecialchars($colorOption); ?>" <?php echo in_array($colorOption, $selectedColors) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($colorOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Size -->
     <label for="size">Size:</label>
-    <input type="text" name="size" id="size" value="<?php echo htmlspecialchars($product->size ?? ''); ?>">
+    <select name="size[]" id="size" multiple>
+        <?php 
+        $selectedSizes = is_array($product->size) ? $product->size : [];
+        foreach ($allowedSizes as $sizeOption): ?>
+            <option value="<?php echo htmlspecialchars($sizeOption); ?>" <?php echo in_array($sizeOption, $selectedSizes) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($sizeOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Alloy -->
     <label for="alloy">Alloy:</label>
-    <input type="text" name="alloy" id="alloy" value="<?php echo htmlspecialchars($product->alloy ?? ''); ?>">
+    <select name="alloy[]" id="alloy" multiple>
+        <?php 
+        $selectedAlloys = is_array($product->alloy) ? $product->alloy : [];
+        foreach ($allowedAlloys as $alloyOption): ?>
+            <option value="<?php echo htmlspecialchars($alloyOption); ?>" <?php echo in_array($alloyOption, $selectedAlloys) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($alloyOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
+    <!-- Multi-select for Gems -->
     <label for="gems">Gems:</label>
-    <input type="text" name="gems" id="gems" value="<?php echo htmlspecialchars($product->gems ?? ''); ?>">
+    <select name="gems[]" id="gems" multiple>
+        <?php 
+        $selectedGems = is_array($product->gems) ? $product->gems : [];
+        foreach ($allowedGems as $gemsOption): ?>
+            <option value="<?php echo htmlspecialchars($gemsOption); ?>" <?php echo in_array($gemsOption, $selectedGems) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($gemsOption); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
 
     <label for="sku">SKU:</label>
     <input type="text" name="sku" id="sku" value="<?php echo htmlspecialchars($product->sku ?? ''); ?>">
@@ -199,7 +246,6 @@ include '../includes/internal/header.php';
         <!-- Search for master product -->
         <label for="master_search">Search for Master Product:</label>
         <input type="text" id="master_search" name="master_search">
-
         <div id="master_results"></div>
     <?php } ?>
 
@@ -209,46 +255,6 @@ include '../includes/internal/header.php';
     <label for="images">Product Images:</label>
     <input type="file" name="images[]" id="images" multiple>
 
-    <?php if($product->is_master) { ?>
-        <h3>Connected Products (Variants)</h3>
-        <div id="connected_products">
-            <?php
-            $connectedProducts = $product->getVariants();
-            if ($connectedProducts) {
-                foreach ($connectedProducts as $connectedProduct) {
-                    echo '<div>';
-                    echo '<p>' . htmlspecialchars($connectedProduct['name'] ?? '') . '</p>';
-                    echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_connection=' . htmlspecialchars($connectedProduct['id']) . '">Remove Connection</a>';
-                    echo '</div>';
-                }
-            } else {
-                echo '<div> None </div> <br>';
-            }
-            ?>
-        </div>
-    <?php } ?>
-
-    <?php if(!$product->is_master) { ?>
-        <h3>Master Products</h3>
-        <div id="master_products">
-            <?php
-            $masterProductId = $product->master_product_id;
-            if ($masterProductId) {
-                // Fetch master product details
-                $masterProduct = new Product($db);
-                $masterProduct->id = $masterProductId;
-                $masterProduct->readOne();
-                echo '<div>';
-                echo '<p>' . htmlspecialchars($masterProduct->name ?? '') . '</p>';
-                echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_master_connection=' . htmlspecialchars($masterProduct->id ?? '') . '">Remove Connection</a>';
-                echo '</div>';
-            } else {
-                echo '<div>None</div>';
-            }
-            ?>
-        </div>
-    <?php } ?>
-    
     <button type="submit">Update Product</button>
 </form>
 
@@ -259,13 +265,13 @@ while ($image = $images->fetch(PDO::FETCH_ASSOC)) {
     echo '<div>';
     echo '<img src="../assets/products/' . htmlspecialchars($product->name ?? '') . '/' . htmlspecialchars($image['image'] ?? '') . '" width="100">';
     if ($image['is_default']) {
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
+        echo '<a href="edit_product.php?slug=' . htmlspecialchars($product->slug ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
         echo ' | ';
         echo '<strong>Default</strong>';
     } else {
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
+        echo '<a href="edit_product.php?slug=' . htmlspecialchars($product->slug ?? '') . '&remove_image=' . htmlspecialchars($image['id'] ?? '') . '">Remove</a>';
         echo ' | ';
-        echo '<a href="edit_product.php?id=' . htmlspecialchars($product->id ?? '') . '&set_default=' . htmlspecialchars($image['id'] ?? '') . '">Set as Default</a>';
+        echo '<a href="edit_product.php?slug=' . htmlspecialchars($product->slug ?? '') . '&set_default=' . htmlspecialchars($image['id'] ?? '') . '">Set as Default</a>';
     }
     echo '</div>';
 }
@@ -275,8 +281,7 @@ while ($image = $images->fetch(PDO::FETCH_ASSOC)) {
     // JavaScript for searching master products
     document.getElementById('master_search').addEventListener('input', function() {
         var query = this.value;
-        if (query.length < 3) return; // Don't search for very short queries
-        
+        if (query.length < 3) return;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', 'search_master.php?q=' + encodeURIComponent(query), true);
         xhr.onload = function() {
@@ -284,7 +289,6 @@ while ($image = $images->fetch(PDO::FETCH_ASSOC)) {
                 var results = JSON.parse(xhr.responseText);
                 var resultsDiv = document.getElementById('master_results');
                 resultsDiv.innerHTML = '';
-                
                 if (results.length > 0) {
                     results.forEach(function(product) {
                         var resultItem = document.createElement('div');
@@ -293,7 +297,7 @@ while ($image = $images->fetch(PDO::FETCH_ASSOC)) {
                             e.preventDefault();
                             document.getElementById('master_product_id').value = product.id;
                             document.getElementById('master_search').value = product.name;
-                            resultsDiv.innerHTML = ''; // Clear results
+                            resultsDiv.innerHTML = '';
                         });
                         resultsDiv.appendChild(resultItem);
                     });

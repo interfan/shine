@@ -7,9 +7,9 @@ $categories_array = getAllCategories($db);
 $product = getProductInstance($db);
 
 // Fetch featured products (for example, products with stock > 0)
-$stmt = $product->readAll();
+$results = $product->readAll();
 $featured_products = array();
-while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+foreach ($results as $row) {
     if ($row['stock'] > 0) {
         $featured_products[] = $row;
     }
