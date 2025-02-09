@@ -26,6 +26,8 @@ class Product {
     public $variation_name; // New property
     public $variation_value; // New property
     public $image; // Ensure this property is declared
+    public $images; // Ensure this property is declared
+    public $default_image;
 
     // NEW: These properties will hold the effective pricing from the pricebook system.
     public $lowest_price;
@@ -133,15 +135,17 @@ class Product {
         return $results;
     }
 
-    // 4. Read one product by slug (populates the product object with effective pricing)
+    // 4. Read one product by slug (populates the product object with effective pricing and all images)
     public function readOne() {
-        $query = "SELECT p.id, p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, p.video, p.color, p.size, p.alloy, p.gems, p.is_master, p.master_product_id, p.is_disabled, p.variation_name, p.variation_value, i.image
-                  FROM " . $this->table_name . " p
-                  LEFT JOIN product_images i ON p.id = i.product_id AND i.is_default = 1
-                  WHERE p.slug = :slug
-                  LIMIT 0,1";
+        $query = "SELECT p.id, p.name, p.slug, p.sku, p.description, p.price, p.category_id, p.stock, 
+                        p.video, p.color, p.size, p.alloy, p.gems, p.is_master, p.master_product_id, 
+                        p.is_disabled, p.variation_name, p.variation_value
+                FROM " . $this->table_name . " p
+                WHERE p.slug = :slug
+                LIMIT 0,1";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(':slug', $this->slug);
+        
         if ($stmt->execute()) {
             $row = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($row) {
@@ -150,6 +154,7 @@ class Product {
                 $this->slug = $row['slug'];
                 $this->sku = $row['sku'];
                 $this->description = $row['description'];
+                
                 // Retrieve pricing using PricebookPrice
                 include_once __DIR__ . '/PricebookPrice.php';
                 $pricebookPrice = new PricebookPrice($this->conn);
@@ -160,7 +165,8 @@ class Product {
                     $this->lowest_price = $row['price'];
                 }
                 $this->standard_price = (!empty($pricing['standard_price'])) ? $pricing['standard_price'] : $row['price'];
-                $this->price = $this->lowest_price; // Optionally assign lowest price to price property.
+                $this->price = $this->lowest_price; // Optionally, assign the lowest price to the product's price property
+                
                 $this->category_id = $row['category_id'];
                 $this->stock = $row['stock'];
                 $this->video = $row['video'];
@@ -173,7 +179,28 @@ class Product {
                 $this->is_disabled = $row['is_disabled'];
                 $this->variation_name = $row['variation_name'];
                 $this->variation_value = $row['variation_value'];
-                $this->image = $row['image'];
+                
+                // Retrieve all images for the product using the ProductImages class.
+                include_once __DIR__ . '/ProductImages.php';
+                $prodImg = new ProductImages($this->conn);
+                // Assuming readByProduct($product_id) returns an array of associative arrays.
+                $this->images = $prodImg->readByProduct($this->id); 
+                
+                // Determine the default image.
+                $this->default_image = null;
+                if (!empty($this->images)) {
+                    foreach ($this->images as $img) {
+                        if (isset($img['is_default']) && $img['is_default']) {
+                            $this->default_image = $img;
+                            break;
+                        }
+                    }
+                    // If no image is marked as default, you may choose the first image as default.
+                    if (!$this->default_image) {
+                        $this->default_image = $this->images[0];
+                    }
+                }
+                
                 return true;
             } else {
                 return false;

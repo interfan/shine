@@ -4571,6 +4571,22 @@ ul.list-products {
 .product-item .price ins {
 	text-decoration: none;
 }
+
+.details-product .price {
+	display: block;
+	font-size: 14px;
+	color: #c09578 !important;
+	font-weight: 500;
+	line-height: 100%;
+}
+.details-product .price del {
+	color: #aaa;
+	margin-right: 5px;
+	font-size: 14px;
+}
+.details-product .price ins {
+	text-decoration: none;
+}
 /* -------------------- */
 /*   Product Style     */
 /* -------------------- */
@@ -5603,6 +5619,13 @@ ul.list-products {
 }
 .details-infor .group-button .yith-wcwl-add-to-wishlist div a::before {
 	content: "\f08a";
+}
+.details-infor .group-button .yith-wcwl-add-to-wishlist .active a::before {
+	content: "\f004";
+	color: #c09578;
+}
+.details-infor .group-button .yith-wcwl-add-to-wishlist .active a {
+	color: #c09578;
 }
 .details-infor .group-button .yith-wcwl-add-to-wishlist div a:hover::before {
 	content: "\f004";

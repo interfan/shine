@@ -56,4 +56,13 @@ function getCategoryInstance($db = null) {
 function getFormInstance($action = '', $method = 'POST', $isPlaceholder = false) {
     return new Forms($action, $method, $isPlaceholder);
 }
+
+function getDeliveryMessage($number) {
+    // If the number is less than 1, return "Delivery in one month time"
+    if ($number < 1) {
+        return "Delivery in one month time";
+    }
+    // Otherwise (if number is 1 or greater) return "Delivery in 2 days"
+    return "Delivery in 2 days";
+}
 ?>

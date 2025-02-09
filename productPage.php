@@ -40,20 +40,25 @@ include './includes/header.php'; // Include header
 								</div>
 								<div class="availability">
 									availability:
-									<a href="#"><?php echo $product->stock; ?></a>
+									<a style="cursor: auto;" href="#" onClick="e.preventDefault();"><?php echo getDeliveryMessage($product->stock); ?></a>
 								</div>
 								<div class="price">
-									<span><?php echo number_format($product->price, 2); ?></span>
+									<?php if (isset($product->standard_price) && $product->standard_price > 0): ?>
+										<span class="standard-price"><del>$<?php echo number_format($product->standard_price, 2); ?></del></span>
+									<?php endif; ?>
+									<?php if (isset($product->lowest_price) && $product->lowest_price > 0): ?>
+										<span class="lowest-price"><ins>$<?php echo number_format($product->lowest_price, 2); ?></ins></span>
+									<?php endif; ?>
 								</div>
 								<div class="product-details-description">
 									<ul>
-										<li><?php echo $product->sku; ?></li>
+										<li>SKU: <?php echo $product->sku; ?></li>
 									</ul>
 								</div>
 								<?php include './includes/pdp-variations.php';?>
 								<div class="group-button">
-									<div class="yith-wcwl-add-to-wishlist">
-										<div class="yith-wcwl-add-button">
+									<div class="yith-wcwl-add-to-wishlist"><?php $_SESSION['wishlist'][$product->id] ?> 1
+										<div class="yith-wcwl-add-button <?php $_SESSION['wishlist'][$product->id] ? 'active' : '' ?>" data-id="<?php echo $product->id; ?>">
 											<a href="#">Add to Wishlist</a>
 										</div>
 									</div>

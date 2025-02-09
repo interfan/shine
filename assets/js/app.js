@@ -88,4 +88,80 @@ $(document).ready(function() {
         });
     });
 
+    $('.yith-wcwl-add-button').on('click', function(e) {
+        e.preventDefault();
+        var productId = $(this).data('id'); // Ensure your button has data-id attribute
+        $.ajax({
+            url: '/wishlist.php',  // Adjust path if necessary
+            type: 'POST',
+            dataType: 'json',
+            data: { action: 'add', productId: productId },
+            success: function(response) {
+                if(response.status === 'success') {
+                    updateWishlistDisplay(response.items);
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Error adding product to wishlist.');
+            }
+        });
+    });
+
+    // Remove product from wishlist
+    $('.remove-from-wishlist-btn').on('click', function(e) {
+        e.preventDefault();
+        var productId = $(this).data('id'); // Ensure your button has data-id attribute
+        $.ajax({
+            url: 'includes/wishlist.php',
+            type: 'POST',
+            dataType: 'json',
+            data: { action: 'remove', productId: productId },
+            success: function(response) {
+                if(response.status === 'success') {
+                    updateWishlistDisplay(response.items);
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Error removing product from wishlist.');
+            }
+        });
+    });
+
+    // Clear wishlist
+    $('#clear-wishlist').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'wishlist.php',
+            type: 'POST',
+            dataType: 'json',
+            data: { action: 'clear' },
+            success: function(response) {
+                if(response.status === 'success') {
+                    updateWishlistDisplay(response.items);
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function() {
+                alert('Error clearing wishlist.');
+            }
+        });
+    });
+
+    // Helper function to update the wishlist display (for example, update the count and list)
+    function updateWishlistDisplay(items) {
+        // Update wishlist count (for example, in an element with id wishlist-count)
+        $('#wishlist-count').text(Object.keys(items).length);
+        // Optionally, update a list of wishlist items (e.g., an unordered list with id wishlist-items)
+        var html = '';
+        $.each(items, function(productId, data) {
+            html += '<li>Product ID: ' + productId + '</li>';
+        });
+        $('#wishlist-items').html(html);
+    }
+
 });

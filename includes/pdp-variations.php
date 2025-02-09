@@ -34,7 +34,7 @@
         </div>
         <div class="list-alloy list-item">
             <?php foreach ($product->alloy as $alloy): ?>
-                <?php echo htmlspecialchars($alloy); ?>
+                <?php echo htmlspecialchars($alloy); ?> | 
             <?php endforeach; ?>
         </div>
     </div>
@@ -47,7 +47,7 @@
         </div>
         <div class="list-gems list-item">
             <?php foreach ($product->gems as $gem): ?>
-                    <?php echo htmlspecialchars($gem); ?>
+                    <?php echo htmlspecialchars($gem); ?> |
             <?php endforeach; ?>
         </div>
     </div>
