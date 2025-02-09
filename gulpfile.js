@@ -5,12 +5,12 @@ const fs = require("fs");
 
 const DB_NAME = "shine"; // Your database name
 const DB_USER = "root";  // WAMP default MySQL user
-const DB_PASS = "";      // Leave empty (WAMP MySQL has no password by default)
+const DB_PASS = "";      // Leave empty if no password
 const BACKUP_DIR = "backup"; // Directory to store backups
 const BACKUP_FILE = path.join(BACKUP_DIR, "backup.sql");
 
-// ✅ Set the MySQL binary path for WAMP
-const MYSQL_BIN_PATH = `"C:\\wamp64\\bin\\mysql\\mysql8.3.0\\bin\\"`; // Change if WAMP is installed elsewhere
+// ✅ Set the MySQL binary path for WAMP (Update if your path is different)
+const MYSQL_BIN_PATH = `C:\\wamp64\\bin\\mysql\\mysql8.3.0\\bin\\`;
 
 // ✅ Ensure the backup directory exists before running commands
 function ensureBackupDir(done) {
@@ -21,14 +21,14 @@ function ensureBackupDir(done) {
     done();
 }
 
-// ✅ Task to dump (export) the database
+// ✅ Task to dump (export) the database with FULL data, triggers, constraints, and procedures
 gulp.task("backup-db", gulp.series(ensureBackupDir, shell.task([
-    `${MYSQL_BIN_PATH}mysqldump -u ${DB_USER} ${DB_PASS ? `-p${DB_PASS}` : ""} ${DB_NAME} > ${BACKUP_FILE}`
+    `${MYSQL_BIN_PATH}mysqldump -u ${DB_USER} ${DB_PASS ? `-p${DB_PASS}` : ""} --routines --triggers --events --single-transaction --quick --lock-tables=false ${DB_NAME} > ${BACKUP_FILE}`
 ])));
 
-// ✅ Task to restore (import) the database
+// ✅ Task to restore (import) the database with FULL dump
 gulp.task("restore-db", shell.task([
-    `${MYSQL_BIN_PATH}mysql -u ${DB_USER} ${DB_PASS ? `-p${DB_PASS}` : ""} ${DB_NAME} < ${BACKUP_FILE}`
+    `${MYSQL_BIN_PATH}mysql -u ${DB_USER} ${DB_NAME} < ${BACKUP_FILE}`
 ]));
 
 // ✅ Default task (backup & restore)
